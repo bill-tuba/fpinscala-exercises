@@ -55,7 +55,6 @@ sealed trait List[+A] {
   }
 
 
-  /*classic fold left tail recursive*/
   def foldLeft[B](z: B)(fn: (A, B) => B) = {
     @scala.annotation.tailrec
     def loop(list: List[A], z: B)(fn: (A, B) => B): B = list match {
@@ -69,7 +68,6 @@ sealed trait List[+A] {
 
   def foldRightInTermsOfFoldLeft[B](z: B)(f: (A, B) => B) = foldLeft(z)(f)
   
-  /*classic fold right*/
   def foldRight[B](z: B)(f: (A, B) => B) = {
     def loop(list: List[A], terminus: B)(fn: (A, B) => B): B = list match {
       case Nil => terminus
