@@ -117,4 +117,16 @@ object List {
   def apply[A](as: A*): List[A] =
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
+
+  def flatten[A](listOfLists : List[List[A]]) : List[A] = {
+//    def loop(headList : List[A], restLists : List[List[A]], flattened : List[A]) : List[A] = headList match {
+//      case Nil => flattened
+//      case _ => loop(restLists.head, restLists.tail , flattened.append(headList))
+//    }
+//    loop(listOfLists.head, listOfLists.tail, Nil)
+    Nil
+  }
+  //foreach list in listlist
+  // append
+  //  def
 }
