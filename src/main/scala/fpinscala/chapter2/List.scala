@@ -79,28 +79,21 @@ sealed trait List[+A] {
     loop(this, z)(f)
   }
 
-
-  def append[A](a1: List[A], a2: List[A]): List[A] =
-    a1 match {
+  def append[B >: A](implicit a2: List[B]): List[B] = {
+    this match {
       case Nil => a2
-      case Cons(h,t) => Cons(h, append(t, a2))
+      case Cons(h, t) => Cons(h, t.append(a2))
     }
+  }
 
-  //    def append(a2: List[A]): List[A] = {
-  //     def loop(a1 : List[A], a2 : List[A]) : List[A]= a1 match {
-  //        case Nil => a2
-  //        case Cons(h,t) => Cons(h, t.append(a2))
-  //      }
-  //      loop(this, Nil)
-  //    }
+  def appendInTermsOfFoldRight[B >: A](implicit a2: List[B]): List[B] = {
+    this.foldRight(a2)(Cons(_, _))
+  }
 
-  //  def appendWithFoldRight(a2: List[A]): List[A] = {
-//    def loop(a1 : List[A], a2 : List[A]) : List[A]= a1 match {
-//      case Nil => a2
-//      case Cons(h,t) => Cons(h, t.append(a2))
-//    }
-//    loop(this, Nil)
-//  }
+  def appendInTermsOfFoldLeft[B >: A](implicit a2: List[B]): List[B] = {
+    this.reverse.foldLeft(a2)(Cons(_, _))
+  }
+
 }
 
 case object Nil extends List[Nothing]
@@ -126,18 +119,4 @@ object List {
   def apply[A](as: A*): List[A] =
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
-
-  def append[A](a1: List[A], a2: List[A]): List[A] =
-    a1 match {
-      case Nil => a2
-      case Cons(h,t) => Cons(h, append(t, a2))
-    }
-
-  def appendInTermsOfFoldRight[A](a1: List[A], a2: List[A]): List[A] = {
-    a1.foldRight(a2)( (a  ,b ) => Cons(a,b) )
-  }
-
-  def appendInTermsOfFoldLeft[A](a1: List[A], a2: List[A]): List[A] = {
-    a1.foldLeft(a2)( (a  ,b ) => Cons(a,b) )
-  }
 }
