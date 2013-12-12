@@ -90,6 +90,16 @@ sealed trait List[+A] {
   def appendInTermsOfFoldLeft[B >: A](implicit a2: List[B]): List[B] = {
     this.reverse.foldLeft(a2)(Cons(_, _))
   }
+
+  def map[B >: A](f: A => B) : List[B] = {
+    def loop(fromList: List[A], toList : List[B]) : List[B] = fromList match{
+      case Nil => toList
+      case Cons(h,t) => loop(fromList.tail, toList.append(List(f(h))))
+    }
+    loop(this, Nil)
+  }
+
+
 }
 
 case object Nil extends List[Nothing]

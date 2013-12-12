@@ -78,6 +78,16 @@ class Chapter02Spec extends FlatSpec {
     assert(List.flatten(List( List(1,2,3), List(4,5)) ) === List(1,2,3,4,5))
     assert(List.flatten(List( List(1), List(2) , List(3)) ) === List(1,2,3))
     assert(List.flatten(List( List(1), List(2,3) , List(4,5)) ) === List(1,2,3,4,5))
+  }
+
+  "Map" should "apply a function to each element in a List" in {
+
+    assert((Nil:List[Int])  .map(_ + 1) === Nil         )
+    assert(List(1)          .map(_ + 1) === List(2)     )
+    assert(List(1,2,3)      .map(_ + 1) === List(2,3,4) )
+    println(List(1.0, 2.0, 3.0).map(_.toString))
+
+    //assert(List(1.0, 2.0, 3.0).map(_.toString) === List("2.0","3.0","4.0") )
 
   }
 
