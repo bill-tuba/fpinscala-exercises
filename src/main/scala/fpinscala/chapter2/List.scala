@@ -112,7 +112,7 @@ object List {
 
   def sum(list: List[Int]): Int = list.foldLeft(0)(_ + _)
 
-  def product(list: List[Double]): Double = list.foldLeft(1.0)(_ + _)
+  def product(list: List[Double]): Double = list.foldLeft(1.0)(_ * _)
 
   def apply[A](as: A*): List[A] =
     if (as.isEmpty) Nil
