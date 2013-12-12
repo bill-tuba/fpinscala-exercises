@@ -90,7 +90,6 @@ sealed trait List[+A] {
   def appendInTermsOfFoldLeft[B >: A](implicit a2: List[B]): List[B] = {
     this.reverse.foldLeft(a2)(Cons(_, _))
   }
-
 }
 
 case object Nil extends List[Nothing]
@@ -117,7 +116,7 @@ object List {
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
 
-  def flatten(listOfLists : List[List[Int]]) : List[Int] = {
-    listOfLists.foldRight(Nil : List[Int])( (inner,total) => inner.foldRight(total)(Cons(_, _)))
+  def flatten(lists : List[List[Int]]) : List[Int] = {
+    lists.foldRight(Nil : List[Int])( (inner,total) => inner.foldRight(total)(Cons(_, _)))
   }
 }
