@@ -72,5 +72,14 @@ class Chapter02Spec extends FlatSpec {
     assert(List.product(List(1, 2, 3, 4)) === 24)
   }
 
+  it can "flatten and combine many Lists into one" in {
+    assert(List.flatten(List( List(1,2,3), Nil : List[Int]) ) === List(1,2,3))
+    assert(List.flatten(List( List(1,2,3), List(4)) ) === List(1,2,3,4))
+    assert(List.flatten(List( List(1,2,3), List(4,5)) ) === List(1,2,3,4,5))
+    assert(List.flatten(List( List(1), List(2) , List(3)) ) === List(1,2,3))
+    assert(List.flatten(List( List(1), List(2,3) , List(4,5)) ) === List(1,2,3,4,5))
+
+  }
+
 
 }

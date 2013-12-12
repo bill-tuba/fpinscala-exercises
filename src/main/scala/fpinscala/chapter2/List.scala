@@ -50,7 +50,7 @@ sealed trait List[+A] {
 
   def init: List[A] = take(length - 1)
 
-  private def Try[A](f: => A): Option[A] = try Some(f) catch {
+  private def Try[B](f: => B): Option[B] = try Some(f) catch {
     case e: Exception => None
   }
 
@@ -71,8 +71,7 @@ sealed trait List[+A] {
   def foldRight[B](z: B)(f: (A, B) => B) = {
     def loop(list: List[A], terminus: B)(fn: (A, B) => B): B = list match {
       case Nil => terminus
-      case Cons(x, xs
-      ) => f(x, loop(xs, z)(f))
+      case Cons(x, xs) => f(x, loop(xs, z)(f))
     }
     loop(this, z)(f)
   }
@@ -118,15 +117,7 @@ object List {
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
 
-  def flatten[A](listOfLists : List[List[A]]) : List[A] = {
-//    def loop(headList : List[A], restLists : List[List[A]], flattened : List[A]) : List[A] = headList match {
-//      case Nil => flattened
-//      case _ => loop(restLists.head, restLists.tail , flattened.append(headList))
-//    }
-//    loop(listOfLists.head, listOfLists.tail, Nil)
-    Nil
+  def flatten(listOfLists : List[List[Int]]) : List[Int] = {
+    listOfLists.foldRight(Nil : List[Int])( (inner,total) => inner.foldRight(total)(Cons(_, _)))
   }
-  //foreach list in listlist
-  // append
-  //  def
 }
