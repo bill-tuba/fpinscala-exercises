@@ -80,16 +80,42 @@ class Chapter02Spec extends FlatSpec {
     assert(List.flatten(List( List(1), List(2,3) , List(4,5)) ) === List(1,2,3,4,5))
   }
 
-  "Map" should "apply a function to each element in a List" in {
-
-    assert((Nil:List[Int])  .map(_ + 1) === Nil         )
-    assert(List(1)          .map(_ + 1) === List(2)     )
-    assert(List(1,2,3)      .map(_ + 1) === List(2,3,4) )
-    println(List(1.0, 2.0, 3.0).map(_.toString))
-
-    //assert(List(1.0, 2.0, 3.0).map(_.toString) === List("2.0","3.0","4.0") )
+  "Map" should "apply a function to each element" in {
+    assert((Nil:List[Int])    .map(_ + 1)     === Nil         )
+    assert(List(1)            .map(_ + 1)     === List(2)     )
+    assert(List(1,2,3)        .map(_ + 1)     === List(2,3,4) )
+    assert(List(1.0, 2.0, 3.0).map(_.toString)=== List("1.0","2.0","3.0") )
 
   }
 
+  "With Filter you" should "be able to retain elements matching a predicate" in {
+    assert(List(1,2,3,4,5).filter( _ % 2 != 0 )                                 === List(1,3,5) )
+    assert(List(1,2,3,4,5).filter( _ % 2 == 0 )                                 === List(2,4) )
+    assert(List(1,2,3,4,5).filter2( _ % 2 == 0 )                                === List(2,4) )
+    assert(List("1","22","333","4","5").filter( s => s.length < 3 && s != "5")  === List("1","22","4") )
+  }
 
+  "With Flat Map you" should "be able to do some damage" in {
+    assert( List.flatMap(List(1,2,3))(i => List(i,i)) === List(1,1,2,2,3,3) )
+    assert( List.flatMap(List(1,2,3))(i => List(i,i+1)) === List(1,2,2,3,3,4) )
+
+  }
+  "Exercise 22 " should "be a function that accepts two lists and constructs a new list by adding corresponding elements." in {
+    assert( List(1,2,3).mapAcross(List(4,5,6))(0)( _ + _ ) === List(5,7,9))
+  }
+
+
+  "Lists" should "be able to detect subsequences" in {
+    assert( List(1,2,3,4).hasSubsequence(List(1))=== true)
+    assert( List(1,2,3,4).hasSubsequence(List(1,2))=== true)
+    assert( List(1,2,3,4).hasSubsequence(List(1,2,3))=== true)
+    assert( List(1,2,3,4).hasSubsequence(List(2,3))=== true)
+    assert( List(1,2,3,4).hasSubsequence(List(4))=== true)
+    assert( List(1).hasSubsequence(List(4))=== false)
+    assert( Nil.hasSubsequence(List(4))=== false)
+    assert( List(1).hasSubsequence(Nil)=== true)
+    assert(List[Int]().hasSubsequence(Nil) ===true)
+    assert( Nil.hasSubsequence(Nil) ===true)
+
+  }
 }
