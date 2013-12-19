@@ -50,8 +50,7 @@ class TreeSpec extends FlatSpec with ShouldMatchers {
                            "this more general function. Can you draw an analogy between this fold function"+
                            "and the left and right folds for List ?"  in {
 
-    assert( Tree.fold(Leaf(1))(0)(_ + 1) === Leaf(2))
-
-
+    assert( Tree.map(Leaf(1))(_ + 1) === Leaf(2))
+    // all other tests should just work
   }
 }
