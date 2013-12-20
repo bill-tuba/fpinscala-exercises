@@ -1,5 +1,8 @@
 package fpinscala.datastructures
 
+import scala.util.Try
+
+
 sealed trait List[+A] {
 
 
@@ -19,11 +22,11 @@ sealed trait List[+A] {
     case Nil => throw new Exception()
   }
 
-  def headOption: Option[A] = Try(this.head)
+  def headOption: Option[A] = Try(this.head).toOption
 
   def tail = if (this.isEmpty) throw new Exception else drop(1)
 
-  def tailOption: Option[List[A]] = Try(this.tail)
+  def tailOption: Option[List[A]] = Try(this.tail).toOption
 
   def drop(n: Int): List[A] = (n, this) match {
     case (0, xs) => xs
@@ -50,11 +53,6 @@ sealed trait List[+A] {
   def length: Int = foldRight(0)((a, b) => b + 1)
 
   def init: List[A] = take(length - 1)
-
-  private def Try[B](f: => B): Option[B] = try Some(f) catch {
-    case e: Exception => None
-  }
-
 
   def foldLeft[B](z: B)(fn: (A, B) => B) = {
     @scala.annotation.tailrec
