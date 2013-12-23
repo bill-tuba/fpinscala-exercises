@@ -29,6 +29,7 @@ object Tree {
     def loop(it:Tree[A]) : A = it match {
         case Leaf(a) => a
         case Branch(l, _) => loop(l)
+
       }
     Try(loop(that)).toOption
   }

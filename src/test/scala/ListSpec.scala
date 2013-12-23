@@ -4,7 +4,7 @@ import fpinscala.datastructures._
 import org.scalatest._
 
 
-class Chapter02Spec extends FlatSpec {
+class ListSpec extends FlatSpec {
 
   "An Empty List" should "is the eqivalent of Nil" in {
     assert(List() == Nil)
@@ -117,5 +117,10 @@ class Chapter02Spec extends FlatSpec {
     assert(List[Int]().hasSubsequence(Nil) ===true)
     assert( Nil.hasSubsequence(Nil) ===true)
 
+  }
+
+  "A zip" should "pull items together" in {
+
+    assert( List(1,3,5).zip( List(2,4,6)) === List(1,2,3,4,5,6))
   }
 }

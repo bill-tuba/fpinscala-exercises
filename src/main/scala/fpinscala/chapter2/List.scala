@@ -40,13 +40,13 @@ sealed trait List[+A] {
     case rest => rest
   }
 
-  def reverse = foldLeft( Nil : List[A])( Cons(_ , _) )
+  def reverse = foldLeft(Nil: List[A])(Cons(_, _))
 
   def take(n: Int): List[A] = {
     @scala.annotation.tailrec
     def loop(m: Int, taken: List[A], accum: List[A]): List[A] =
-    if (m == 0 || taken.isEmpty) accum
-    else loop(m - 1, taken.tail, Cons(taken.head, accum))
+      if (m == 0 || taken.isEmpty) accum
+      else loop(m - 1, taken.tail, Cons(taken.head, accum))
     loop(n, this, Nil).reverse
   }
 
@@ -90,21 +90,21 @@ sealed trait List[+A] {
     this.reverse.foldLeft(a2)(Cons(_, _))
   }
 
-  def map[B >: A](f: A => B) : List[B] = {
-    def loop(fromList: List[A], toList : List[B]) : List[B] = fromList match{
+  def map[B >: A](f: A => B): List[B] = {
+    def loop(fromList: List[A], toList: List[B]): List[B] = fromList match {
       case Nil => toList
-      case Cons(h,t) => loop(fromList.tail, toList.append(List(f(h))))
+      case Cons(h, t) => loop(fromList.tail, toList.append(List(f(h))))
     }
     loop(this, Nil)
   }
 
-  def filter[B >: A](fn: A => Boolean) : List[B] = foldRight(Nil : List[B])((h,t) => if(fn(h)) Cons(h,t) else t)
+  def filter[B >: A](fn: A => Boolean): List[B] = foldRight(Nil: List[B])((h, t) => if (fn(h)) Cons(h, t) else t)
 
-  def filter2[B >: A](fn: A => Boolean) : List[B] =
-    List.flatMap(this)((a) => if(fn(a)) List(a) else Nil)
+  def filter2[B >: A](fn: A => Boolean): List[B] =
+    List.flatMap(this)((a) => if (fn(a)) List(a) else Nil)
 
-  def mapAcross[B >: A](that : List[B])(z : B)( f :(B,B) => B) : List[B] = this match {
-    case Cons(h,t) => Cons(List(h, that.head).foldLeft(z)(f), tail.mapAcross(that.tail)(z)(f))
+  def mapAcross[B >: A](that: List[B])(z: B)(f: (B, B) => B): List[B] = this match {
+    case Cons(h, t) => Cons(List(h, that.head).foldLeft(z)(f), tail.mapAcross(that.tail)(z)(f))
     case Nil => Nil
 
   }
@@ -118,7 +118,18 @@ sealed trait List[+A] {
     loop(this, that, hasSub = true)
   }
 
+
+  def zip[B >: A](second: List[B]): List[B] = {
+    def loop[B >: A](first: List[A], second: List[B], total: List[B]): List[B] = (first, second) match {
+      case (Nil, b) => b.append(total)
+      case (a, Nil) => a.append(total)
+      case (Cons(aHead, aTail), Cons(bHead, bTail)) => loop(aTail, bTail, total.append(List(aHead,bHead)))
+    }
+    loop(this, second, Nil)
+  }
+
 }
+
 
 case object Nil extends List[Nothing]
 
@@ -144,24 +155,25 @@ object List {
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
 
-  def flatten[A](lists : List[List[A]]) : List[A] = {
-    lists.foldRight(Nil : List[A])((tot,e) => tot.append(e) )
+  def flatten[A](lists: List[List[A]]): List[A] = {
+    lists.foldRight(Nil: List[A])((tot, e) => tot.append(e))
   }
 
   def concat[A](l: List[List[A]]): List[A] =
-    l.foldRight(Nil:List[A])((tot,e) => tot.append(e) )
+    l.foldRight(Nil: List[A])((tot, e) => tot.append(e))
 
 
-  def foldRight[A,B](l: List[A], z: B)(f: (A, B) => B): B = // Utility functions
+  def foldRight[A, B](l: List[A], z: B)(f: (A, B) => B): B = // Utility functions
     l match {
       case Nil => z
       case Cons(x, xs) => f(x, foldRight(xs, z)(f))
     }
 
-  def map[A,B](l: List[A])(f: A => B): List[B] =
-    l.foldRight(Nil:List[B])((h,t) => Cons(f(h),t))
+  def map[A, B](l: List[A])(f: A => B): List[B] =
+    l.foldRight(Nil: List[B])((h, t) => Cons(f(h), t))
+
   //    l.map(f)
 
-  def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] =
+  def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] =
     concat(map(l)(f))
 }
