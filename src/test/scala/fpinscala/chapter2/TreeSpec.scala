@@ -1,5 +1,10 @@
+package fpinscala.chapter2
+
 import fpinscala.chapter2.{Tree , Branch, Leaf}
 import org.scalatest.{ShouldMatchers, FlatSpec}
+import scala._
+import fpinscala.chapter2.Leaf
+import fpinscala.chapter2.Branch
 
 class TreeSpec extends FlatSpec with ShouldMatchers {
 

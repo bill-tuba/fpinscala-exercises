@@ -1,3 +1,5 @@
+package fpinscala.chapter2
+
 
 import fpinscala.datastructures._
 
