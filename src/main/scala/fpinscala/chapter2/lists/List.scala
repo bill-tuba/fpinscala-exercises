@@ -1,4 +1,4 @@
-package fpinscala.datastructures
+package fpinscala.chapter2.lists
 
 import scala.util.Try
 
@@ -120,7 +120,7 @@ sealed trait List[+A] {
 
 
   def zip[B >: A](second: List[B]): List[B] = {
-    def loop[B >: A](first: List[A], second: List[B], total: List[B]): List[B] = (first, second) match {
+    def loop(first: List[A], second: List[B], total: List[B]): List[B] = (first, second) match {
       case (Nil, b) => b.append(total)
       case (a, Nil) => a.append(total)
       case (Cons(aHead, aTail), Cons(bHead, bTail)) => loop(aTail, bTail, total.append(List(aHead,bHead)))

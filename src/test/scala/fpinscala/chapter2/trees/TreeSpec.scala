@@ -1,16 +1,13 @@
-package fpinscala.chapter2
+package fpinscala.chapter2.trees
 
-import fpinscala.chapter2.{Tree , Branch, Leaf}
 import org.scalatest.{ShouldMatchers, FlatSpec}
-import scala._
-import fpinscala.chapter2.Leaf
-import fpinscala.chapter2.Branch
+import fpinscala.chapter2.trees
 
 class TreeSpec extends FlatSpec with ShouldMatchers {
 
   behavior of "A Tree"
   "EXERCISE 25:" should "Write a function size that counts the number of nodes (leaves and branches) in a tree." in {
-    assert( Nil.size === 0 )
+    assert( trees.Nil.size === 0 )
     assert( Leaf(1).size === 1 )
     assert( Branch(Leaf(1),Leaf(1)).size === 3)
     assert( Branch(Leaf(1),Branch(Leaf(1), Leaf(1))).size === 5)

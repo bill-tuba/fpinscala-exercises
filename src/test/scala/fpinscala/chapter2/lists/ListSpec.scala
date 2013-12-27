@@ -1,10 +1,7 @@
-package fpinscala.chapter2
+package fpinscala.chapter2.lists
 
-
-import fpinscala.datastructures._
 
 import org.scalatest._
-
 
 class ListSpec extends FlatSpec {
 
