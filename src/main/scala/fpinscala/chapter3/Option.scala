@@ -1,10 +1,27 @@
 package fpinscala.chapter3
 
-sealed trait Option[+A]
+sealed trait Option[+A] {
 
-case class Some[+A](get : A) extends Option[A]
-case object None extends Option[Nothing]
+  def map[B >: A](f: A => B): Option[B] = this match {
+    case Some(a) => Some(f(a))
+    case _ => None
+  }
 
-object Option {
+  def filter(f: A => Boolean): Option[A] = this match {
+    case Some(a) if (f(a)) => Some(a)
+    case _ => None
+  }
 
+  def getOrElse[B >: A](default : => B ) : B = this match {
+    case Some(a) => a
+    case _ => default
+  }
+  def orElse[B >: A] ( default : => Option[B]) : Option[B] = this match {
+    case None => default
+    case _ => this
+  }
 }
+
+case class Some[+A](get: A) extends Option[A]
+
+case object None extends Option[Nothing]
