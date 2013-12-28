@@ -7,6 +7,11 @@ sealed trait Option[+A] {
     case _ => None
   }
 
+  def flatMap[B](f : (A => Option[B])) : Option[B] = this match{
+    case Some(a) => f(a)
+    case None => None
+  }
+
   def filter(f: A => Boolean): Option[A] = this match {
     case Some(a) if (f(a)) => Some(a)
     case _ => None

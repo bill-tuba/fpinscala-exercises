@@ -16,6 +16,17 @@ class OptionSpec extends WordSpec with Matchers{
         (None : Option[Int]).map( _ * 2) shouldEqual None
       }
     }
+
+    "flat-map" should {
+      "given SOme apply function and return Some" in {
+        Some(1).flatMap( a => Some(a + 1)) shouldEqual Some(2)
+      }
+
+      "given None not apply function and return None" in {
+        (None : Option[Int]).flatMap( a => Some(a)) shouldEqual None
+      }
+
+    }
     "filtering" should{
       "yield None if None" in {
         (None : Option[Int]).filter( _ == 2) shouldEqual None
