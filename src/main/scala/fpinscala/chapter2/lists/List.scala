@@ -123,7 +123,7 @@ sealed trait List[+A] {
     def loop(first: List[A], second: List[B], total: List[B]): List[B] = (first, second) match {
       case (Nil, b) => b.append(total)
       case (a, Nil) => a.append(total)
-      case (Cons(aHead, aTail), Cons(bHead, bTail)) => loop(aTail, bTail, total.append(List(aHead,bHead)))
+      case (Cons(aHead, aTail), Cons(bHead, bTail)) => loop(aTail, bTail, total.append(List(aHead, bHead)))
     }
     loop(this, second, Nil)
   }

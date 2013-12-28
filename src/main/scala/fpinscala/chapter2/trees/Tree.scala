@@ -25,12 +25,12 @@ case object Nil extends Tree[Nothing]
 object Tree {
 
 
-  def head[A](that: Tree[A]): Option[A] ={
-    def loop(it:Tree[A]) : A = it match {
-        case Leaf(a) => a
-        case Branch(l, _) => loop(l)
+  def head[A](that: Tree[A]): Option[A] = {
+    def loop(it: Tree[A]): A = it match {
+      case Leaf(a) => a
+      case Branch(l, _) => loop(l)
 
-      }
+    }
     Try(loop(that)).toOption
   }
 

@@ -47,8 +47,10 @@ class ListSpec extends FlatSpec {
 
   it should "throw an exception tailing empty lists" in {
 
-    scala.collection.immutable.List(  List() , Nil).foreach (
-      x => intercept[Exception] { x.tail }
+    scala.collection.immutable.List(List(), Nil).foreach(
+      x => intercept[Exception] {
+        x.tail
+      }
     )
   }
 
@@ -72,54 +74,54 @@ class ListSpec extends FlatSpec {
   }
 
   it can "flatten and combine many Lists into one" in {
-    assert(List.flatten(List( List(1,2,3), Nil : List[Int]) ) === List(1,2,3))
-    assert(List.flatten(List( List(1,2,3), List(4)) ) === List(1,2,3,4))
-    assert(List.flatten(List( List(1,2,3), List(4,5)) ) === List(1,2,3,4,5))
-    assert(List.flatten(List( List(1), List(2) , List(3)) ) === List(1,2,3))
-    assert(List.flatten(List( List(1), List(2,3) , List(4,5)) ) === List(1,2,3,4,5))
+    assert(List.flatten(List(List(1, 2, 3), Nil: List[Int])) === List(1, 2, 3))
+    assert(List.flatten(List(List(1, 2, 3), List(4))) === List(1, 2, 3, 4))
+    assert(List.flatten(List(List(1, 2, 3), List(4, 5))) === List(1, 2, 3, 4, 5))
+    assert(List.flatten(List(List(1), List(2), List(3))) === List(1, 2, 3))
+    assert(List.flatten(List(List(1), List(2, 3), List(4, 5))) === List(1, 2, 3, 4, 5))
   }
 
   "Map" should "apply a function to each element" in {
-    assert((Nil:List[Int])    .map(_ + 1)     === Nil         )
-    assert(List(1)            .map(_ + 1)     === List(2)     )
-    assert(List(1,2,3)        .map(_ + 1)     === List(2,3,4) )
-    assert(List(1.0, 2.0, 3.0).map(_.toString)=== List("1.0","2.0","3.0") )
+    assert((Nil: List[Int]).map(_ + 1) === Nil)
+    assert(List(1).map(_ + 1) === List(2))
+    assert(List(1, 2, 3).map(_ + 1) === List(2, 3, 4))
+    assert(List(1.0, 2.0, 3.0).map(_.toString) === List("1.0", "2.0", "3.0"))
 
   }
 
   "With Filter you" should "be able to retain elements matching a predicate" in {
-    assert(List(1,2,3,4,5).filter( _ % 2 != 0 )                                 === List(1,3,5) )
-    assert(List(1,2,3,4,5).filter( _ % 2 == 0 )                                 === List(2,4) )
-    assert(List(1,2,3,4,5).filter2( _ % 2 == 0 )                                === List(2,4) )
-    assert(List("1","22","333","4","5").filter( s => s.length < 3 && s != "5")  === List("1","22","4") )
+    assert(List(1, 2, 3, 4, 5).filter(_ % 2 != 0) === List(1, 3, 5))
+    assert(List(1, 2, 3, 4, 5).filter(_ % 2 == 0) === List(2, 4))
+    assert(List(1, 2, 3, 4, 5).filter2(_ % 2 == 0) === List(2, 4))
+    assert(List("1", "22", "333", "4", "5").filter(s => s.length < 3 && s != "5") === List("1", "22", "4"))
   }
 
   "With Flat Map you" should "be able to do some damage" in {
-    assert( List.flatMap(List(1,2,3))(i => List(i,i)) === List(1,1,2,2,3,3) )
-    assert( List.flatMap(List(1,2,3))(i => List(i,i+1)) === List(1,2,2,3,3,4) )
+    assert(List.flatMap(List(1, 2, 3))(i => List(i, i)) === List(1, 1, 2, 2, 3, 3))
+    assert(List.flatMap(List(1, 2, 3))(i => List(i, i + 1)) === List(1, 2, 2, 3, 3, 4))
 
   }
   "Exercise 22 " should "be a function that accepts two lists and constructs a new list by adding corresponding elements." in {
-    assert( List(1,2,3).mapAcross(List(4,5,6))(0)( _ + _ ) === List(5,7,9))
+    assert(List(1, 2, 3).mapAcross(List(4, 5, 6))(0)(_ + _) === List(5, 7, 9))
   }
 
 
   "Lists" should "be able to detect subsequences" in {
-    assert( List(1,2,3,4).hasSubsequence(List(1))=== true)
-    assert( List(1,2,3,4).hasSubsequence(List(1,2))=== true)
-    assert( List(1,2,3,4).hasSubsequence(List(1,2,3))=== true)
-    assert( List(1,2,3,4).hasSubsequence(List(2,3))=== true)
-    assert( List(1,2,3,4).hasSubsequence(List(4))=== true)
-    assert( List(1).hasSubsequence(List(4))=== false)
-    assert( Nil.hasSubsequence(List(4))=== false)
-    assert( List(1).hasSubsequence(Nil)=== true)
-    assert(List[Int]().hasSubsequence(Nil) ===true)
-    assert( Nil.hasSubsequence(Nil) ===true)
+    assert(List(1, 2, 3, 4).hasSubsequence(List(1)) === true)
+    assert(List(1, 2, 3, 4).hasSubsequence(List(1, 2)) === true)
+    assert(List(1, 2, 3, 4).hasSubsequence(List(1, 2, 3)) === true)
+    assert(List(1, 2, 3, 4).hasSubsequence(List(2, 3)) === true)
+    assert(List(1, 2, 3, 4).hasSubsequence(List(4)) === true)
+    assert(List(1).hasSubsequence(List(4)) === false)
+    assert(Nil.hasSubsequence(List(4)) === false)
+    assert(List(1).hasSubsequence(Nil) === true)
+    assert(List[Int]().hasSubsequence(Nil) === true)
+    assert(Nil.hasSubsequence(Nil) === true)
 
   }
 
   "A zip" should "pull items together" in {
 
-    assert( List(1,3,5).zip( List(2,4,6)) === List(1,2,3,4,5,6))
+    assert(List(1, 3, 5).zip(List(2, 4, 6)) === List(1, 2, 3, 4, 5, 6))
   }
 }

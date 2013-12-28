@@ -61,7 +61,7 @@ import fpinscala.chapter2.lists
 //List(1,2,3).append(List(4,5,6))
 //List(1,2,3).appendInTermsOfFoldRight( List(4,5,6) )
 //List(1,2,3).appendInTermsOfFoldLeft( List(4,5,6) )
-lists.List.flatten( lists.List(lists.List(1,2,3), lists.List(4,5,6)) )
+lists.List.flatten(lists.List(lists.List(1, 2, 3), lists.List(4, 5, 6)))
 
 
 
