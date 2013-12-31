@@ -6,14 +6,27 @@ import scala.{Option => _, Some => _, None => _}
 
 class ExamplesSpec extends WordSpec with Matchers {
 
-  "Finding a mean " when {
-    "we have no numbers" should {
-      "be None" in {
+  "A Sequence's mean" when {
+    "empty" should {
+      "be undefined" in {
         mean(List()) shouldEqual None
       }
-      "we have some numbers" should {
-        "be Some mean" in {
+      "non-empty" should {
+        "be the mean" in {
           mean(List(1, 2, 3)) shouldEqual Some(2)
+        }
+      }
+    }
+  }
+
+  "A Sequence Variance" when {
+    "empty" should {
+      "be undefined" in {
+        variance(List()) shouldEqual None
+      }
+      "not empty" should {
+        "be the mean of means" in {
+          variance(List(1, 2, 3)) shouldEqual Some(2.0 / 3.0)
         }
       }
     }
@@ -27,6 +40,11 @@ class ExamplesSpec extends WordSpec with Matchers {
     }
   }
 
+
+  def variance(xs: Seq[Double]): Option[Double] = {
+    if (xs.isEmpty) None
+    else mean(xs).map(m => xs.map(x => math.pow(x - m, 2))).flatMap(mean)
+  }
 
   def mean(xs: Seq[Double]): Option[Double] =
     if (xs.isEmpty) None

@@ -60,5 +60,4 @@ class OptionSpec extends WordSpec with Matchers {
       Some(1).orElse(Some(2)) shouldEqual Some(1)
     }
   }
-
 }

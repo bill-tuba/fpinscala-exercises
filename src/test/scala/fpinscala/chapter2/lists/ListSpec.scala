@@ -96,7 +96,7 @@ class ListSpec extends FlatSpec {
     assert(List("1", "22", "333", "4", "5").filter(s => s.length < 3 && s != "5") === List("1", "22", "4"))
   }
 
-  "With Flat Map you" should "be able to do some damage" in {
+  "With Flat Map you" should "be able apply an option returning function to a sequence" in {
     assert(List.flatMap(List(1, 2, 3))(i => List(i, i)) === List(1, 1, 2, 2, 3, 3))
     assert(List.flatMap(List(1, 2, 3))(i => List(i, i + 1)) === List(1, 2, 2, 3, 3, 4))
 
