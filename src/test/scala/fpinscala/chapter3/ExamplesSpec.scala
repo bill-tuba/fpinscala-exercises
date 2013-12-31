@@ -41,10 +41,8 @@ class ExamplesSpec extends WordSpec with Matchers {
   }
 
 
-  def variance(xs: Seq[Double]): Option[Double] = {
-    if (xs.isEmpty) None
-    else mean(xs).map(m => xs.map(x => math.pow(x - m, 2))).flatMap(mean)
-  }
+  def variance(xs: Seq[Double]): Option[Double] =
+    mean(xs) flatMap (m => mean(xs.map(x => math.pow(x - m, 2))))
 
   def mean(xs: Seq[Double]): Option[Double] =
     if (xs.isEmpty) None
