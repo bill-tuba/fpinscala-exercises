@@ -1,6 +1,6 @@
 package fpinscala.chapter3
 
-object OptionUtilityFns {
+object OptionUtilityFunctions {
 
   def lift[A, B](f: A => B): Option[A] => Option[B] = _ map f
 
@@ -49,7 +49,7 @@ object OptionUtilityFns {
 
   def sequence3[A](a: List[Option[A]]): Option[List[A]] = {
     a.foldRight[Option[List[A]]](Some(Nil)) {
-      (opt, optList) => OptionUtilityFns.map2(opt, optList) {
+      (opt, optList) => OptionUtilityFunctions.map2(opt, optList) {
         _ :: _
       }
     }

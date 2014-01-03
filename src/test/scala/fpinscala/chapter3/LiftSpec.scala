@@ -2,7 +2,7 @@ package fpinscala.chapter3
 
 import org.scalatest.Matchers
 import org.scalatest.WordSpec
-import fpinscala.chapter3.OptionUtilityFns._
+import fpinscala.chapter3.OptionUtilityFunctions._
 
 
 class LiftSpec extends WordSpec with Matchers {

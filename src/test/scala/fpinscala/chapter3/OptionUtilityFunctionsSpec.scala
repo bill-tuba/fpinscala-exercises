@@ -2,9 +2,9 @@ package fpinscala.chapter3
 
 import org.scalatest.Matchers
 import org.scalatest.WordSpec
-import OptionUtilityFns._
+import OptionUtilityFunctions._
 
-class SequenceSpec extends WordSpec with Matchers {
+class OptionUtilityFunctionsSpec extends WordSpec with Matchers {
 
   "Exercise 4 ch 3" should {
     "List with all somes is an Option of Some(List)" in {
@@ -25,10 +25,7 @@ class SequenceSpec extends WordSpec with Matchers {
 
 
   "Traverse with any failure results in None" in {
-    import fpinscala.chapter3.OptionUtilityFns.Try
-    val sToInt = (s: String) => Try {
-      s.toInt
-    }
+    val sToInt = (s: String) => Try(s.toInt)
 
     traverse(List())(sToInt) shouldEqual Some(Nil)
     traverse(List("1"))(sToInt) shouldEqual Some(List(1))
