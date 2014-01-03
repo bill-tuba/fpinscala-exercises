@@ -2,7 +2,7 @@ package fpinscala.chapter3
 
 import org.scalatest.Matchers
 import org.scalatest.WordSpec
-import LiftsSeqsTraversalAndTry._
+import OptionUtilityFns._
 
 class SequenceSpec extends WordSpec with Matchers {
 
@@ -25,7 +25,7 @@ class SequenceSpec extends WordSpec with Matchers {
 
 
   "Traverse with any failure results in None" in {
-    import fpinscala.chapter3.LiftsSeqsTraversalAndTry.Try
+    import fpinscala.chapter3.OptionUtilityFns.Try
     val sToInt = (s: String) => Try {
       s.toInt
     }
