@@ -55,10 +55,15 @@ object LiftsSeqsTraversalAndTry {
     }
   }
 
+  // 'my' traverse isn't the answer in the answers collection - yet it seems ok
   def traverse[A, B](input: List[A])(f: A => Option[B]): Option[List[B]] =
     input.foldRight(Some(Nil): Option[List[B]]) {
       (a, optionalList) =>
         f(a) flatMap (h => optionalList map (h :: _))
     }
+
+  //  def sequence4[A](a: List[Option[A]]): Option[List[A]] = {
+  //    traverse(a){;lp}
+  //  }
 
 }
