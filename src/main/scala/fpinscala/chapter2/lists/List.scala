@@ -106,7 +106,6 @@ sealed trait List[+A] {
   def mapAcross[B >: A](that: List[B])(z: B)(f: (B, B) => B): List[B] = this match {
     case Cons(h, t) => Cons(List(h, that.head).foldLeft(z)(f), tail.mapAcross(that.tail)(z)(f))
     case Nil => Nil
-
   }
 
   def hasSubsequence[B >: A](that: List[B]): Boolean = {

@@ -37,6 +37,11 @@ sealed trait Option[+A] {
 
   def orElse3[B >: A](default: => Option[B]): Option[B] = filter(_ == None)
 
+  def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
+    a flatMap (aa => b map (bb => f(aa, bb)))
+
+  //or
+  //for { aa <- a; bb <- b} yield f(aa,bb)
 }
 
 case class Some[+A](get: A) extends Option[A]

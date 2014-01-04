@@ -10,10 +10,10 @@ object OptionUtilityFunctions {
       case _ => None
     }
 
-  def Try[A](a: => A): Option[A] =
+  def Try[A, E](a: => A): Option[A] =
     try Some(a)
     catch {
-      case e: Exception => None
+      case e: E => None
     }
 
   /**
@@ -61,9 +61,5 @@ object OptionUtilityFunctions {
       (a, optionalList) =>
         f(a) flatMap (h => optionalList map (h :: _))
     }
-
-  //  def sequence4[A](a: List[Option[A]]): Option[List[A]] = {
-  //    traverse(a){;lp}
-  //  }
 
 }

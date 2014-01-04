@@ -40,6 +40,7 @@ object Either {
     case h :: t => h flatMap (hh => sequence(t) map (tt => hh :: tt))
   }
 
+  // flatMap -> map => for  I'm seeing a pattern here .... ;)
   def sequence2[E, A](a: List[Either[E, A]]): Either[E, List[A]] = a match {
     case Nil => Right(Nil)
     case h :: t => for {hh <- h; tt <- sequence(t)} yield {
