@@ -4,7 +4,10 @@ scalaVersion := "2.10.2"
 
 organization := "Bill Adams"
 
-libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
+libraryDependencies ++= Seq(
+  "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
+  "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
+)
 
- // append options passed to the Scala compiler
+// append options passed to the Scala compiler
 scalacOptions ++= Seq("-deprecation", "-unchecked")
