@@ -1,4 +1,4 @@
-package fpinscala.chapter2.trees
+package fpinscala.chapter3.trees
 
 import scala.util.Try
 

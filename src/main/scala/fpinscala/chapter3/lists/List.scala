@@ -1,4 +1,4 @@
-package fpinscala.chapter2.lists
+package fpinscala.chapter3.lists
 
 import scala.util.Try
 

@@ -1,8 +1,8 @@
-package fpinscala.chapter3
+package fpinscala.chapter4
 
 import org.scalatest.Matchers
 import org.scalatest.WordSpec
-import fpinscala.chapter3.OptionUtilityFunctions._
+import fpinscala.chapter4.OptionUtilityFunctions._
 
 
 class LiftSpec extends WordSpec with Matchers {

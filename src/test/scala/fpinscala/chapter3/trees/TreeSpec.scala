@@ -1,7 +1,7 @@
-package fpinscala.chapter2.trees
+package fpinscala.chapter3.trees
 
 import org.scalatest.{ShouldMatchers, FlatSpec}
-import fpinscala.chapter2.trees
+import fpinscala.chapter3.trees
 
 class TreeSpec extends FlatSpec with ShouldMatchers {
 

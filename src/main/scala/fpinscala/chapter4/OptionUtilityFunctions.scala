@@ -1,4 +1,4 @@
-package fpinscala.chapter3
+package fpinscala.chapter4
 
 object OptionUtilityFunctions {
 

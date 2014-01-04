@@ -1,5 +1,5 @@
 
-import fpinscala.chapter2.lists
+import fpinscala.chapter3.lists
 
 //List.product(List(1, 2, 3, 4))
 //List.product(List(2))
