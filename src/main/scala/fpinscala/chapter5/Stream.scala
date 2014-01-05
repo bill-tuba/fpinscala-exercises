@@ -28,6 +28,8 @@ sealed abstract class Stream[+A] {
     }
     loop(this, Nil)
   }
+
+  def takeWhile(p: A => Boolean): Stream[A] = Empty
 }
 
 object Empty extends Stream[Nothing] {
