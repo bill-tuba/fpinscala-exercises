@@ -20,7 +20,7 @@ class StreamSpec extends WordSpec with Matchers {
       }
     }
     "Unconsing of Streams" should {
-      "When Empty be None" in {
+      "Be None When Empty" in {
         Empty.uncons shouldBe None
       }
       "When Non Empty be Some" in {
@@ -33,6 +33,7 @@ class StreamSpec extends WordSpec with Matchers {
         Empty.toList shouldBe Nil
       }
       "Yield List of N elements for Stream" in {
+        Stream().toList shouldBe Nil
         Stream(1).toList shouldBe List(1)
         Stream(1, 2).toList shouldBe List(1, 2)
         Stream(1, 2, 3).toList shouldBe List(1, 2, 3)
@@ -55,12 +56,29 @@ class StreamSpec extends WordSpec with Matchers {
         Stream(1, 2, 3).take(3) shouldBe Empty
         Stream(1, 2, 3).take(4) shouldBe Empty
       }
+    }
 
-      "Yields Stream while predicate returns true" in {
-
+    "Take while predicate" should {
+      "Yield Empty on Empty" in {
+        Empty.takeWhile(x => true) shouldBe Empty
+        Empty.takeWhile(x => false) shouldBe Empty
+      }
+      "Yield original Stream with all elemeent on perpetually false predicate" in {
+        Stream(1).takeWhile(x => false).toList shouldBe List(1)
+        Stream(1).takeWhile(_ == 0).toList shouldBe List(1)
       }
 
+      "Yields Stream minus elements upto where condition failed" in {
+        Stream(1).takeWhile(_ < 3) shouldBe Empty
+        Stream(1, 2).takeWhile(_ < 3) shouldBe Empty
+        Stream(1, 2, 3).takeWhile(_ < 3).toList shouldBe List(3)
+      }
+
+      "Exhaust Stream when always true" in {
+        Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).takeWhile(x => true) shouldBe Empty
+      }
     }
   }
+
 
 }

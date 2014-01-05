@@ -29,7 +29,10 @@ sealed abstract class Stream[+A] {
     loop(this, Nil)
   }
 
-  def takeWhile(p: A => Boolean): Stream[A] = Empty
+  def takeWhile(p: A => Boolean): Stream[A] = uncons match {
+    case Some(e) if p(e.head) => e.tail.takeWhile(p)
+    case _ => this
+  }
 }
 
 object Empty extends Stream[Nothing] {
