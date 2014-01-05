@@ -1,9 +1,33 @@
 package fpinscala.chapter5
 
 sealed abstract class Stream[+A] {
+
+  def take(i: Int): Stream[A] = uncons match {
+    case None => Empty
+    case Some(e) if i > 0 => e.tail.take(i - 1)
+    case _ => this
+  }
+
   def uncons: Option[Cons[A]]
 
   def isEmpty: Boolean = uncons.isEmpty
+
+  def toList2: List[A] = {
+    // non-tail-rec
+    uncons match {
+      case Some(c) => c.head :: c.tail.toList2
+      case _ => Nil
+    }
+  }
+
+  def toList: List[A] = {
+    @scala.annotation.tailrec
+    def loop(stream: Stream[A], list: List[A]): List[A] = stream.uncons match {
+      case Some(cons) => loop(cons.tail, list :+ cons.head)
+      case _ => list
+    }
+    loop(this, Nil)
+  }
 }
 
 object Empty extends Stream[Nothing] {
@@ -17,6 +41,7 @@ sealed abstract class Cons[+A] extends Stream[A] {
 }
 
 object Stream {
+
   def empty[A]: Stream[A] = Empty
 
   def cons[A](h: => A, t: => Stream[A]): Stream[A] = new Cons[A] {
