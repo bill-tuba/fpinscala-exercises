@@ -37,11 +37,9 @@ sealed abstract class Stream[+A] {
   def map[B](f: (A) => B): Stream[B] =
     foldRight(empty[B]) { (h, t) => cons(f(h), t) }
 
-//  def filter(p: A => Boolean): Stream[A] =
-//    foldRight(empty[A]) { (h, t) => if (p(h)) cons(h, t) else t }
-//
   def filter[B](f: A => Boolean): Stream[A] =
     foldRight(empty[A])(  (h,t) => if (f(h)) cons(h, t)   else t)
+
   def append[B >: A](implicit a2: Stream[B]): Stream[B] =
     foldRight(a2) {(h, t) => cons(h, t)}
 
