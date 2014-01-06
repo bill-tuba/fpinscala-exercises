@@ -171,8 +171,6 @@ object List {
   def map[A, B](l: List[A])(f: A => B): List[B] =
     l.foldRight(Nil: List[B])((h, t) => Cons(f(h), t))
 
-  //    l.map(f)
-
   def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] =
     concat(map(l)(f))
 }

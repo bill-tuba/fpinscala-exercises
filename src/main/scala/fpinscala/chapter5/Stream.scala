@@ -34,20 +34,16 @@ sealed abstract class Stream[+A] {
     foldRight(false)((a, b) => p(a) && b)
 
   def map[B](f: (A) => B): Stream[B] =
-    foldRight(Stream.empty[B]) {
-      (h, t) => Stream.cons(f(h), t)
-    }
+    foldRight(Stream.empty[B]) { (h, t) => Stream.cons(f(h), t) }
 
   def filter(p: A => Boolean): Stream[A] =
-    foldRight(Stream.empty[A]) {
-      (h, t) => if (p(h)) Stream.cons(h, t) else t
-    }
+    foldRight(Stream.empty[A]) { (h, t) => if (p(h)) Stream.cons(h, t) else t }
 
-  def append[B >: A](implicit a2: Stream[B]): Stream[B] = {
-    this.foldRight(a2) {
-      (h, t) => Stream.cons(h, t)
-    }
-  }
+  def append[B >: A](implicit a2: Stream[B]): Stream[B] =
+    this.foldRight(a2) {(h, t) => Stream.cons(h, t)}
+
+  def flatMap[B](f: A => Stream[B]): Stream[B] =
+    Stream.empty
 
   def toList: List[A] = {
     @scala.annotation.tailrec
