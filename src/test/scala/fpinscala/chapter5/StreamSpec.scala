@@ -184,5 +184,18 @@ class StreamSpec extends WordSpec with Matchers {
       stream.take(2)     .toList  shouldBe Nil
       stream.foldRight(1){_ * _ } shouldBe 8
     }
+    "reordering the composed stream gets different results" in{
+      def stream1: Stream[Int] = Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ % 2 == 0).map(_ + 1).filter(_ < 5)
+      stream1             .toList  shouldBe List(3)
+      stream1.take(0)     .toList  shouldBe List(3)
+      stream1.take(1)     .toList  shouldBe Nil
+      stream1.foldRight(1){_ * _ } shouldBe 3
+
+      def stream2: Stream[Int] = Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ % 2 == 0).filter(_ < 5).map(_ + 1)
+      stream2             .toList  shouldBe List(3,5)
+      stream2.take(0)     .toList  shouldBe List(3,5)
+      stream2.take(1)     .toList  shouldBe List(5)
+      stream2.foldRight(1){_ * _ } shouldBe 15
+    }
   }
 }
