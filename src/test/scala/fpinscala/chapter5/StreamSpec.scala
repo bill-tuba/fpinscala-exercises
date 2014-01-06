@@ -94,7 +94,7 @@ class StreamSpec extends WordSpec with Matchers {
   }
 
   "Checking whether a condition exists" should {
-    "always fail on Empty for any predicate" in {
+    "always fail on an Empty Stream for predicate" in {
       Stream[Int]().exists(x => x == 1) shouldBe false
       Stream[Int]().exists(x => x > 1) shouldBe false
       Stream[Int]().exists(x => x < 1) shouldBe false
