@@ -182,7 +182,7 @@ class StreamSpec extends WordSpec with Matchers {
       stream.take(0).toList  shouldBe List(2,4)
       stream.take(1).toList  shouldBe List(4)
       stream.take(2).toList  shouldBe Nil
-
+      stream.foldRight(1){_ * _ } shouldBe 8
     }
   }
 }
