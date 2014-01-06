@@ -4,7 +4,6 @@ import org.scalatest.{Matchers, WordSpec}
 
 class StreamSpec extends WordSpec with Matchers {
 
-
   "Streams" when {
     "constructed" can {
       "have no elements" in {
@@ -60,22 +59,22 @@ class StreamSpec extends WordSpec with Matchers {
 
     "Take while predicate" should {
       "Yield Empty on Empty" in {
-        Empty.takeWhile(x => true) shouldBe Empty
-        Empty.takeWhile(x => false) shouldBe Empty
+        Empty.takeWhile(x => true) shouldBe Stream.empty
+        Empty.takeWhile(x => false) shouldBe Stream.empty
       }
-      "Yield original Stream with all elemeent on perpetually false predicate" in {
-        Stream(1).takeWhile(x => false).toList shouldBe List(1)
-        Stream(1).takeWhile(_ == 0).toList shouldBe List(1)
+      "Yield empty with all element on perpetually false predicate" in {
+        Stream(1).takeWhile(x => false) shouldBe Stream.empty
+        Stream(1).takeWhile(_ == 0) shouldBe Stream.empty
       }
 
-      "Yields Stream minus elements upto where condition failed" in {
-        Stream(1).takeWhile(_ < 3) shouldBe Empty
-        Stream(1, 2).takeWhile(_ < 3) shouldBe Empty
-        Stream(1, 2, 3).takeWhile(_ < 3).toList shouldBe List(3)
+      "Yields Stream minus elements up-to where condition failed" in {
+        Stream(1).takeWhile(_ < 3).toList shouldBe List(1)
+        Stream(1, 2).takeWhile(_ < 3).toList shouldBe List(1, 2)
+        Stream(1, 2, 3).takeWhile(_ < 3).toList shouldBe List(1, 2)
       }
 
       "Exhaust Stream when always true" in {
-        Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).takeWhile(x => true) shouldBe Empty
+        Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).takeWhile(x => true).toList shouldBe (1 to 10).toList
       }
     }
     "Folding" should {
@@ -86,9 +85,6 @@ class StreamSpec extends WordSpec with Matchers {
         Stream(1, 2, 3).foldRight(0) {
           (a, b) => b + a
         } shouldBe 6
-        Stream(1, 2, 3).foldRight(false: Boolean) {
-          (a, b) => a == 1 || b
-        } shouldBe true
       }
     }
   }
@@ -113,12 +109,14 @@ class StreamSpec extends WordSpec with Matchers {
   }
 
   "ForAll applies itself to all elements and" should {
+
     "fail on an Empty Stream" in {
       Stream[Int]().exists(x => x == 1) shouldBe false
       Stream[Int]().exists(x => x > 1) shouldBe false
       Stream[Int]().exists(x => x < 1) shouldBe false
       Stream[Int]().exists(x => x != 1) shouldBe false
     }
+
     "fail where predicate fails on any element" in {
       Stream(1, 2, 3).forAll(_ == 0) shouldBe false
       Stream(1, 2, 3).forAll(_ > 4) shouldBe false
@@ -126,10 +124,21 @@ class StreamSpec extends WordSpec with Matchers {
       Stream(1, 2, 3).forAll(_ == 1) shouldBe false
       Stream(1, 2, 3).forAll(_ < 3) shouldBe false
     }
+
     "succeed where predicate evaluates to true for-all elements" in {
       Stream(1, 2, 3).forAll(x => x > 0 && x < 4) shouldBe false
       Stream(1, 2, 3).forAll(x => (1 to 3).contains(x)) shouldBe false
     }
   }
 
+  "Fold-R" should {
+    "be able to implement take-while" in {
+      Stream(1).takeWhileWithFoldr(x => false).toList shouldBe Nil
+      Stream(1).takeWhileWithFoldr(_ == 0).toList shouldBe Nil
+      Stream(1).takeWhileWithFoldr(_ < 3).toList shouldBe List(1)
+      Stream(1, 2).takeWhileWithFoldr(_ < 3).toList shouldBe List(1, 2)
+      Stream(1, 2, 3).takeWhileWithFoldr(_ < 3).toList shouldBe List(1, 2)
+      Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).takeWhileWithFoldr(x => true).toList shouldBe (1 to 10).toList
+    }
+  }
 }

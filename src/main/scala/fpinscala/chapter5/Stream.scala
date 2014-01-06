@@ -7,15 +7,20 @@ sealed abstract class Stream[+A] {
   def isEmpty: Boolean = uncons.isEmpty
 
   def take(i: Int): Stream[A] = uncons match {
-    case None => Empty
     case Some(e) if i > 0 => e.tail.take(i - 1)
+    case None => Stream.empty
     case _ => this
   }
 
-  def takeWhile(p: A => Boolean): Stream[A] = uncons match {
-    case Some(e) if p(e.head) => e.tail.takeWhile(p)
-    case _ => this
+  def takeWhile(f: A => Boolean): Stream[A] = uncons match {
+    case Some(c) if f(c.head) => Stream.cons(c.head, c.tail takeWhile f)
+    case _ => Stream.empty
   }
+
+  def takeWhileWithFoldr(p: A => Boolean): Stream[A] =
+    foldRight(Stream.empty[A]) {
+      (h, t) => if (p(h)) Stream.cons(h, t) else Stream.empty
+    }
 
   def foldRight[B](z: B)(f: (A, => B) => B): B = uncons match {
     case Some(e) => f(e.head, e.tail.foldRight(z)(f))
