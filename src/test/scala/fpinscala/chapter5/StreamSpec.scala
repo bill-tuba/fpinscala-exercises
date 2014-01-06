@@ -2,8 +2,10 @@ package fpinscala.chapter5
 
 import org.scalatest.{Matchers, WordSpec}
 
-class StreamSpec extends WordSpec with Matchers {
+import scala.Some
 
+class StreamSpec extends WordSpec with Matchers {
+  import Stream.{empty => anEmpty, cons }
   "Streams" when {
     "constructed" can {
       "have no elements" in {
@@ -59,12 +61,12 @@ class StreamSpec extends WordSpec with Matchers {
 
     "Take while predicate" should {
       "Yield Empty on Empty" in {
-        Empty.takeWhile(x => true ) shouldBe Stream.empty
-        Empty.takeWhile(x => false) shouldBe Stream.empty
+        Empty.takeWhile(x => true ) shouldBe anEmpty
+        Empty.takeWhile(x => false) shouldBe anEmpty
       }
       "Yield empty with all element on perpetually false predicate" in {
-        Stream(1).takeWhile(x => false) shouldBe Stream.empty
-        Stream(1).takeWhile(_ == 0    ) shouldBe Stream.empty
+        Stream(1).takeWhile(x => false) shouldBe anEmpty
+        Stream(1).takeWhile(_ == 0    ) shouldBe anEmpty
       }
 
       "Yields Stream minus elements up-to where condition failed" in {
@@ -148,28 +150,28 @@ class StreamSpec extends WordSpec with Matchers {
   "Using foldRight you" should {
 
     "be able to implement map" in {
-      Stream.empty[Int] .map( _ + 1)     .toList shouldBe Nil
+      anEmpty[Int] .map( _ + 1)     .toList shouldBe Nil
       Stream(1, 2, 3)   .map( _ + 1)     .toList shouldBe List(2, 3, 4)
       Stream(1, 2, 3)   .map( _.toString).toList shouldBe List("1", "2", "3")
     }
 
     "be able to implement filter" in {
-      Stream.empty[Int].filter( _ > 0)  .toList shouldBe Nil
+      anEmpty[Int].filter( _ > 0)  .toList shouldBe Nil
       Stream(1)        .filter( _ > 0)  .toList shouldBe List(1)
       Stream(1, 2, 3)  .filter( _ > 0)  .toList shouldBe List(1, 2, 3)
       Stream(1, 2, 3)  .filter( _ < 3)  .toList shouldBe List(1, 2)
     }
 
     "be able to implement append" in {
-      Stream.empty[Int] .append( Stream.empty  ).toList shouldBe Nil
-      Stream.empty[Int] .append( Stream(1)     ).toList shouldBe List(1)
-      Stream(1)         .append( Stream.empty  ).toList shouldBe List(1)
+      anEmpty[Int] .append( anEmpty  ).toList shouldBe Nil
+      anEmpty[Int] .append( Stream(1)     ).toList shouldBe List(1)
+      Stream(1)         .append( anEmpty  ).toList shouldBe List(1)
       Stream(1, 2)      .append( Stream(3)     ).toList shouldBe List(1, 2, 3)
       Stream(1, 2)      .append( Stream(3, 4)  ).toList shouldBe List(1, 2, 3, 4)
     }
 
     "be able to implement flatMap" in {
-      Stream.empty[Int] .flatMap( i=>  Stream(i)       ).toList shouldBe Nil
+      anEmpty[Int] .flatMap( i=>  Stream(i)       ).toList shouldBe Nil
       Stream(1, 2, 3)   .flatMap( i => Stream(i + 1)   ).toList shouldBe List(2, 3, 4)
       Stream(1, 2, 3)   .flatMap( i => Stream(i, i + 1)).toList shouldBe List(1,2,2,3,3,4)
     }
@@ -200,7 +202,7 @@ class StreamSpec extends WordSpec with Matchers {
   }
   "Find" should {
     "get the first element matching predicate p" in{
-      Stream.empty[Int] .find( _ <  3) shouldBe None
+      anEmpty[Int] .find( _ <  3) shouldBe None
       Stream(1,2,3)     .find( _ <  3) shouldBe Some(1)
       Stream(3)         .find( _ <  3) shouldBe None
       Stream(1,2,3)     .find( _ == 2) shouldBe Some(2)
