@@ -1,6 +1,7 @@
 package fpinscala.chapter5
 
 sealed abstract class Stream[+A] {
+  import Stream._
 
   def uncons: Option[Cons[A]]
 
@@ -13,13 +14,13 @@ sealed abstract class Stream[+A] {
   }
 
   def takeWhile(f: A => Boolean): Stream[A] = uncons match {
-    case Some(c) if f(c.head) => Stream.cons(c.head, c.tail takeWhile f)
-    case _ => Stream.empty
+    case Some(c) if f(c.head) => cons(c.head, c.tail takeWhile f)
+    case _ => empty
   }
 
   def takeWhileWithFoldr(p: A => Boolean): Stream[A] =
-    foldRight(Stream.empty[A]) {
-      (h, t) => if (p(h)) Stream.cons(h, t) else Stream.empty
+    foldRight(empty[A]) {
+      (h, t) => if (p(h)) cons(h, t) else empty
     }
 
   def foldRight[B](z: B)(f: (A, => B) => B): B = uncons match {
@@ -34,16 +35,16 @@ sealed abstract class Stream[+A] {
     foldRight(false)((a, b) => p(a) && b)
 
   def map[B](f: (A) => B): Stream[B] =
-    foldRight(Stream.empty[B]) { (h, t) => Stream.cons(f(h), t) }
+    foldRight(empty[B]) { (h, t) => cons(f(h), t) }
 
   def filter(p: A => Boolean): Stream[A] =
-    foldRight(Stream.empty[A]) { (h, t) => if (p(h)) Stream.cons(h, t) else t }
+    foldRight(empty[A]) { (h, t) => if (p(h)) cons(h, t) else t }
 
   def append[B >: A](implicit a2: Stream[B]): Stream[B] =
-    foldRight(a2) {(h, t) => Stream.cons(h, t)}
+    foldRight(a2) {(h, t) => cons(h, t)}
 
   def flatMap[B](f: A => Stream[B]): Stream[B] =
-    foldRight(Stream.empty[B]){ (h,t) => f(h).append(t)}
+    foldRight(empty[B]){ (h,t) => f(h).append(t)}
 
   def toList: List[A] = {
     @scala.annotation.tailrec
