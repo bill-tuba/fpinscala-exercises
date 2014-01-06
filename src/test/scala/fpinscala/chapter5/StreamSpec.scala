@@ -198,4 +198,11 @@ class StreamSpec extends WordSpec with Matchers {
       stream2.foldRight(1){_ * _ } shouldBe 15
     }
   }
+  "Find" should {
+    "get the first element matching predicate p" in{
+      Stream.empty[Int].find( _ < 3).toList shouldBe Nil
+      Stream(1,2,3).find( _ < 3).toList shouldBe List(1)
+
+    }
+  }
 }
