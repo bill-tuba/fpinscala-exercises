@@ -78,7 +78,37 @@ class StreamSpec extends WordSpec with Matchers {
         Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).takeWhile(x => true) shouldBe Empty
       }
     }
+    "Folding" should {
+      "yield a value" in {
+        Stream[Int]().foldRight(0) {
+          (a, b) => b + a
+        } shouldBe 0
+        Stream(1, 2, 3).foldRight(0) {
+          (a, b) => b + a
+        } shouldBe 6
+        Stream(1, 2, 3).foldRight(false: Boolean) {
+          (a, b) => a == 1 || b
+        } shouldBe true
+      }
+    }
   }
 
-
+  "Checking whether a condition exists" should {
+    "always fail on Empty for any predicate" in {
+      Stream[Int]().exists(x => x == 1) shouldBe false
+      Stream[Int]().exists(x => x > 1) shouldBe false
+      Stream[Int]().exists(x => x < 1) shouldBe false
+      Stream[Int]().exists(x => x != 1) shouldBe false
+    }
+    "evaluate to false if predicate fails" in {
+      Stream(1, 2, 3).exists(_ == 0) shouldBe false
+      Stream(1, 2, 3).exists(_ > 4) shouldBe false
+      Stream(1, 2, 3).exists(_ < 1) shouldBe false
+    }
+    "evaluate to true if predicate if satisfied supplied any element" in {
+      Stream(1, 2, 3).exists(_ == 1) shouldBe true
+      Stream(1, 2, 3).exists(_ == 2) shouldBe true
+      Stream(1, 2, 3).exists(_ == 3) shouldBe true
+    }
+  }
 }
