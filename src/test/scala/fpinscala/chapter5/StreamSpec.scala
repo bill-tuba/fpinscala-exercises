@@ -178,10 +178,10 @@ class StreamSpec extends WordSpec with Matchers {
   "With our HOFs in place we" should {
     "be able to compose a lazy chain" in{
       def stream: Stream[Int] = Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ < 5).map(_ + 1).filter(_ % 2 == 0)
-      stream.toList  shouldBe List(2,4)
-      stream.take(0).toList  shouldBe List(2,4)
-      stream.take(1).toList  shouldBe List(4)
-      stream.take(2).toList  shouldBe Nil
+      stream             .toList  shouldBe List(2,4)
+      stream.take(0)     .toList  shouldBe List(2,4)
+      stream.take(1)     .toList  shouldBe List(4)
+      stream.take(2)     .toList  shouldBe Nil
       stream.foldRight(1){_ * _ } shouldBe 8
     }
   }
