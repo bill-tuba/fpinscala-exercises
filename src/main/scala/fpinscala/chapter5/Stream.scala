@@ -33,6 +33,22 @@ sealed abstract class Stream[+A] {
   def forAll(p: A => Boolean): Boolean =
     foldRight(false)((a, b) => p(a) && b)
 
+  def map[B](f: (A) => B): Stream[B] =
+    foldRight(Stream.empty[B]) {
+      (h, t) => Stream.cons(f(h), t)
+    }
+
+  def filter(p: A => Boolean): Stream[A] =
+    foldRight(Stream.empty[A]) {
+      (h, t) => if (p(h)) Stream.cons(h, t) else t
+    }
+
+  def append[B >: A](implicit a2: Stream[B]): Stream[B] = {
+    this.foldRight(a2) {
+      (h, t) => Stream.cons(h, t)
+    }
+  }
+
   def toList: List[A] = {
     @scala.annotation.tailrec
     def loop(stream: Stream[A], list: List[A]): List[A] = stream.uncons match {

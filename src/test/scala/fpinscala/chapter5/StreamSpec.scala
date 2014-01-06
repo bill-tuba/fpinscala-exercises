@@ -141,4 +141,35 @@ class StreamSpec extends WordSpec with Matchers {
       Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).takeWhileWithFoldr(x => true).toList shouldBe (1 to 10).toList
     }
   }
+
+  "uncons in terms of foldRight" should {
+    "be like our old uncons" in {
+      // ? ? ?
+    }
+  }
+
+  "Using foldRight you" should {
+    "be able to implement map" in {
+      Stream.empty[Int].map(_ + 1).toList shouldBe Nil
+      Stream(1, 2, 3).map(_ + 1).toList shouldBe List(2, 3, 4)
+      Stream(1, 2, 3).map(_.toString).toList shouldBe List("1", "2", "3")
+    }
+    "be able to implement filter" in {
+      Stream.empty[Int].filter(_ > 0).toList shouldBe Nil
+      Stream(1).filter(_ > 0).toList shouldBe List(1)
+      Stream(1, 2, 3).filter(_ > 0).toList shouldBe List(1, 2, 3)
+      Stream(1, 2, 3).filter(_ < 3).toList shouldBe List(1, 2)
+    }
+    "be able to implement append" in {
+      Stream.empty[Int].append(Stream.empty).toList shouldBe Nil
+      Stream.empty[Int].append(Stream(1)).toList shouldBe List(1)
+      Stream(1).append(Stream.empty).toList shouldBe List(1)
+      Stream(1, 2).append(Stream(3)).toList shouldBe List(1, 2, 3)
+      Stream(1, 2).append(Stream(3, 4)).toList shouldBe List(1, 2, 3, 4)
+
+    }
+    "be able to implement flatMap" in {
+
+    }
+  }
 }
