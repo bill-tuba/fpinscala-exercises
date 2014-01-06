@@ -25,6 +25,9 @@ sealed abstract class Stream[+A] {
   def exists(p: A => Boolean): Boolean =
     foldRight(false)((a, b) => p(a) || b)
 
+  def forAll(p: A => Boolean): Boolean =
+    foldRight(false)((a, b) => p(a) && b)
+
   def toList: List[A] = {
     @scala.annotation.tailrec
     def loop(stream: Stream[A], list: List[A]): List[A] = stream.uncons match {

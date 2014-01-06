@@ -111,4 +111,25 @@ class StreamSpec extends WordSpec with Matchers {
       Stream(1, 2, 3).exists(_ == 3) shouldBe true
     }
   }
+
+  "ForAll applies itself to all elements and" should {
+    "fail on an Empty Stream" in {
+      Stream[Int]().exists(x => x == 1) shouldBe false
+      Stream[Int]().exists(x => x > 1) shouldBe false
+      Stream[Int]().exists(x => x < 1) shouldBe false
+      Stream[Int]().exists(x => x != 1) shouldBe false
+    }
+    "fail where predicate fails on any element" in {
+      Stream(1, 2, 3).forAll(_ == 0) shouldBe false
+      Stream(1, 2, 3).forAll(_ > 4) shouldBe false
+      Stream(1, 2, 3).forAll(_ < 1) shouldBe false
+      Stream(1, 2, 3).forAll(_ == 1) shouldBe false
+      Stream(1, 2, 3).forAll(_ < 3) shouldBe false
+    }
+    "succeed where predicate evaluates to true for-all elements" in {
+      Stream(1, 2, 3).forAll(x => x > 0 && x < 4) shouldBe false
+      Stream(1, 2, 3).forAll(x => (1 to 3).contains(x)) shouldBe false
+    }
+  }
+
 }
