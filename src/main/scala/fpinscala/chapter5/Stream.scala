@@ -87,11 +87,8 @@ object Stream {
   }
   val infinity: Stream[Int] = cons(1, infinity)
 
-  def constant[A](a: A): Stream[A] = cons(a, constant(a))
+  def constant[A](a: A): Stream[A] =  cons(a, constant(a))
 
-  def from(n: Int): Stream[Int] = new Cons[Int] {
-    val head = n
-    lazy val tail = from(n+1)
-  }
+  def from(n: Int): Stream[Int] =     cons(n , from( n + 1 ))
 
 }

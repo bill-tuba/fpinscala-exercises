@@ -127,6 +127,7 @@ class StreamSpec extends WordSpec with Matchers {
     "succeed where predicate evaluates to true for-all elements" in {
       Stream(1, 2, 3).forAll(x => x > 0 && x < 4)       shouldBe true
       Stream(1, 2, 3).forAll(x => (1 to 3).contains(x)) shouldBe true
+      Stream(1, 2, 3).forAll(x => (1 to 2).contains(x)) shouldBe false
       Stream(1, 2, 3).forAll(x => x < 0 && x > 4)       shouldBe false
     }
   }
@@ -227,12 +228,11 @@ class StreamSpec extends WordSpec with Matchers {
     "infinite list makes for infinite fun" in{
       infinity.take(5).toList shouldBe List(1,1,1,1,1)
     }
-    "create incrementing Stream" in{
+    "create incrementing" in{
       from(1).take(1).toList               shouldBe List(1)
       from(1).take(2).toList               shouldBe List(1,2)
       from(1).take(3).toList               shouldBe List(1,2,3)
       from(2).take(2).toList               shouldBe List(2,3)
-
     }
   }
 
