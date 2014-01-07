@@ -14,6 +14,9 @@ class StreamSpec extends WordSpec with Matchers {
   def stream3   = Stream(1,2,3)
   def stream10  = Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
+  def zipA  = Stream(1,3,5)
+  def zipB  = Stream(2,4,6)
+
   "Streams" when {
     "constructed" can {
       "have no elements" in {
@@ -264,6 +267,31 @@ class StreamSpec extends WordSpec with Matchers {
       fibAt(6)                      shouldBe 8
       fibAt(32)                     shouldBe 2178309
       fibAt(100)                    shouldBe BigInt("354224848179261915075")
+    }
+
+    "Unfolding" should {
+      "make fibs" in{
+        fibWithUnfold.take(1)        .toList   shouldBe List(0)
+        fibWithUnfold.take(7)        .toList   shouldBe List(0,1,1,2,3,5,8)
+      }
+      "rest of exercise 12" in{
+        fromWithUnfold(1).take(3)     .toList  shouldBe List(1,2,3)
+        constantWithUnfold(1).take(5) .toList  shouldBe List.fill(5)(1)
+        onesWithUnfold.take(6)        .toList  shouldBe List.fill(6)(1)
+      }
+      "EXERCISE 13: Use unfold to implement map, take, takeWhile, zip and zipAll. "in {
+        stream3.mapWithUnfold( x => x + 1)              .toList shouldBe List(2,3,4)
+        stream3.map(_.toString).mapWithUnfold( _.toInt ).toList shouldBe List(1,2,3)
+
+        stream3.takeWithUnfold(0)                       .toList shouldBe Nil
+        stream3.takeWithUnfold(1)                       .toList shouldBe List(1)
+        stream3.takeWithUnfold(3)                       .toList shouldBe List(1,2,3)
+
+        stream3.takeWhileWithUnfold(_ < 3)              .toList shouldBe List(1,2)
+
+      //  zipA.zipWithUnfold(zipB)                        .toList shouldBe List(1,2,3,4,5,6)
+
+      }
     }
   }
 
