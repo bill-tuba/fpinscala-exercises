@@ -3,6 +3,8 @@ package fpinscala.chapter5
 import org.scalatest.{Matchers, WordSpec}
 
 import scala.Some
+import fpinscala.chapter5.Stream._
+import scala.Some
 
 class StreamSpec extends WordSpec with Matchers {
   import Stream.{empty => anEmpty, cons,infinity }
@@ -213,6 +215,21 @@ class StreamSpec extends WordSpec with Matchers {
       infinity.map(_ + 1) .exists(_ % 2 == 0)        shouldBe true
       infinity.takeWhile(_ == 1).take(1)             shouldBe a [Stream[Int]]
       infinity.forAll(_ != 1)                        shouldBe false
+    }
+
+    "generalize infinite to a fn" in {
+      constant(1).take(5)    .exists( _ == 1   )     shouldBe true
+      constant(1).map(_ + 1) .exists(_ % 2 == 0)     shouldBe true
+      constant(1).takeWhile(_ == 1).take(1)          shouldBe a [Stream[Int]]
+      constant(1).forAll(_ != 1)                     shouldBe false
+    }
+
+    "create incrementing Stream" in{
+      from(1).take(1).uncons.get.head               shouldBe 1
+      from(1).take(2).uncons.get.head               shouldBe 2
+      from(1).take(3).uncons.get.head               shouldBe 3
+      from(2).take(2).uncons.get.head               shouldBe 4
+
     }
   }
 
