@@ -7,11 +7,13 @@ sealed abstract class Stream[+A] {
 
   def isEmpty: Boolean = uncons.isEmpty
 
-  def take(i: Int): Stream[A] = uncons match {
-    case Some(e) if i > 0 => e.tail.take(i - 1)
-    case None => Stream.empty
-    case _ => this
-  }
+  def take(n: Int): Stream[A] =
+    if (n > 0) uncons match {
+      case Some(c) if n == 1  => cons(c.head, Stream())
+      case Some(c)            => cons(c.head, c.tail.take(n-1))
+      case _                  => empty
+    }else empty
+
 
   def takeWhile(f: A => Boolean): Stream[A] = uncons match {
     case Some(c) if f(c.head) => cons(c.head, c.tail takeWhile f)
@@ -84,5 +86,6 @@ object Stream {
     lazy val head = h
     lazy val tail = t
   }
+  val ones: Stream[Int] = cons(1, ones)
 
 }

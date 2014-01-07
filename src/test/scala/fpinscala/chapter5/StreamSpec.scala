@@ -47,15 +47,15 @@ class StreamSpec extends WordSpec with Matchers {
         Empty.take(-1) shouldBe Empty
       }
       "Yields Stream less Taken elements" in {
-        Stream(1).take(0).toList shouldBe Stream(1).toList
-        Stream(1).take(1) shouldBe Empty
-        Stream(1, 2).take(1).toList shouldBe Stream(2).toList
-        Stream(1, 2, 3).take(-1).toList shouldBe Stream(1, 2, 3).toList
-        Stream(1, 2, 3).take(0) .toList shouldBe Stream(1, 2, 3).toList
-        Stream(1, 2, 3).take(1) .toList shouldBe Stream(2, 3).toList
-        Stream(1, 2, 3).take(2) .toList shouldBe Stream(3).toList
-        Stream(1, 2, 3).take(3) .toList shouldBe Nil
-        Stream(1, 2, 3).take(4) .toList shouldBe Nil
+        Stream(1).take(0).toList shouldBe Nil
+        Stream(1).take(1).toList shouldBe List(1)
+        Stream(1, 2).take(1).toList shouldBe Stream(1).toList
+        Stream(1, 2, 3).take(-1).toList shouldBe Nil
+        Stream(1, 2, 3).take(0) .toList shouldBe Nil
+        Stream(1, 2, 3).take(1) .toList shouldBe Stream(1).toList
+        Stream(1, 2, 3).take(2) .toList shouldBe Stream(1,2).toList
+        Stream(1, 2, 3).take(3) .toList shouldBe List(1,2,3)
+        Stream(1, 2, 3).take(4) .toList shouldBe List(1,2,3)
       }
     }
 
@@ -181,22 +181,22 @@ class StreamSpec extends WordSpec with Matchers {
     "be able to compose a lazy chain" in{
       def stream: Stream[Int] = Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ < 5).map(_ + 1).filter(_ % 2 == 0)
       stream             .toList  shouldBe List(2,4)
-      stream.take(0)     .toList  shouldBe List(2,4)
-      stream.take(1)     .toList  shouldBe List(4)
-      stream.take(2)     .toList  shouldBe Nil
+      stream.take(0)     .toList  shouldBe Nil
+      stream.take(1)     .toList  shouldBe List(2)
+      stream.take(2)     .toList  shouldBe List(2,4)
       stream.foldRight(1){_ * _ } shouldBe 8
     }
     "reordering the composed stream gets different results" in{
       def stream1: Stream[Int] = Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ % 2 == 0).map(_ + 1).filter(_ < 5)
       stream1             .toList  shouldBe List(3)
-      stream1.take(0)     .toList  shouldBe List(3)
-      stream1.take(1)     .toList  shouldBe Nil
+      stream1.take(0)     .toList  shouldBe Nil
+      stream1.take(1)     .toList  shouldBe List(3)
       stream1.foldRight(1){_ * _ } shouldBe 3
 
       def stream2: Stream[Int] = Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ % 2 == 0).filter(_ < 5).map(_ + 1)
       stream2             .toList  shouldBe List(3,5)
-      stream2.take(0)     .toList  shouldBe List(3,5)
-      stream2.take(1)     .toList  shouldBe List(5)
+      stream2.take(0)     .toList  shouldBe Nil
+      stream2.take(1)     .toList  shouldBe List(3)
       stream2.foldRight(1){_ * _ } shouldBe 15
     }
   }
@@ -207,5 +207,11 @@ class StreamSpec extends WordSpec with Matchers {
       Stream(3)         .find( _ <  3) shouldBe None
       Stream(1,2,3)     .find( _ == 2) shouldBe Some(2)
     }
+
+    "test finite part of an infinite stream" in {
+      Stream.ones.take(5).exists( _ == 1 ) shouldBe true
+    }
   }
+
+
 }
