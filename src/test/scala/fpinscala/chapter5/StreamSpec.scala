@@ -2,11 +2,11 @@ package fpinscala.chapter5
 
 import org.scalatest.{Matchers, WordSpec}
 
-import fpinscala.chapter5.Stream._
+
 import scala.Some
 
 class StreamSpec extends WordSpec with Matchers {
-  import Stream.{empty => anEmpty, infinity }
+  import Stream.{empty => anEmpty, _ }
   
   def stream0   = Stream[Int]()
   def stream1   = Stream(1)
@@ -243,10 +243,29 @@ class StreamSpec extends WordSpec with Matchers {
       infinity.take(1000) .toList               shouldBe List.fill(1000)(1)
     }
     "create an incrementing series" in{
+      from(0).take(1)     .toList               shouldBe List(0)
+      from(1).take(1)     .toList               shouldBe List(1)
       from(1).take(2)     .toList               shouldBe List(1,2)
       from(1).take(3)     .toList               shouldBe List(1,2,3)
       from(2).take(2)     .toList               shouldBe List(2,3)
     }
-    from(1).take(1)       .toList               shouldBe List(1)
+
+    "fibs" in {
+      fibs.take(1)        .toList   shouldBe List(0)
+      fibs.take(2)        .toList   shouldBe List(0,1)
+      fibs.take(3)        .toList   shouldBe List(0,1,1)
+      fibs.take(4)        .toList   shouldBe List(0,1,1,2)
+      fibs.take(5)        .toList   shouldBe List(0,1,1,2,3)
+      fibs.take(6)        .toList   shouldBe List(0,1,1,2,3,5)
+      fibs.take(7)        .toList   shouldBe List(0,1,1,2,3,5,8)
+      fibAt(0)                      shouldBe 0
+      fibAt(1)                      shouldBe 1
+      fibAt(2)                      shouldBe 1
+      fibAt(6)                      shouldBe 8
+      fibAt(32)                     shouldBe 2178309
+      fibAt(100)                    shouldBe BigInt("354224848179261915075")
+    }
   }
+
+
 }

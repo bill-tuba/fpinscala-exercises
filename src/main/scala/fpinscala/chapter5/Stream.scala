@@ -91,4 +91,11 @@ object Stream {
 
   def from(n: Int)     : Stream[Int]  = cons(n , from( n + 1 ))
 
+  def fibs             : Stream[BigInt]  = {
+    def loop (first:BigInt, second:BigInt , s : Stream[BigInt]) : Stream[BigInt] =
+        cons(first, loop(second, first + second, s))
+    loop(0,1,empty)
+  }
+
+  def fibAt( idx : Int ) : BigInt = fibs.take(idx + 1 ).toList.last
 }
