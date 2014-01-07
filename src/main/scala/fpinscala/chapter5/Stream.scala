@@ -92,10 +92,13 @@ object Stream {
   def from(n: Int)     : Stream[Int]  = cons(n , from( n + 1 ))
 
   def fibs             : Stream[BigInt]  = {
-    def loop (first:BigInt, second:BigInt , s : Stream[BigInt]) : Stream[BigInt] =
-        cons(first, loop(second, first + second, s))
-    loop(0,1,empty)
+    def loop (first:BigInt, second:BigInt) : Stream[BigInt] =
+        cons(first, loop(second, first + second ))
+    loop(0,1)
   }
 
   def fibAt( idx : Int ) : BigInt = fibs.take(idx + 1 ).toList.last
+
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] =empty
+
 }
