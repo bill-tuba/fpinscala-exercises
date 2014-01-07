@@ -190,17 +190,19 @@ class StreamSpec extends WordSpec with Matchers {
       stream.foldRight(1){_ * _ } shouldBe 8
     }
     "reordering the composed stream gets different results" in{
-      def stream1: Stream[Int] = Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ % 2 == 0).map(_ + 1).filter(_ < 5)
-      stream1             .toList  shouldBe List(3)
-      stream1.take(0)     .toList  shouldBe Nil
-      stream1.take(1)     .toList  shouldBe List(3)
-      stream1.foldRight(1){_ * _ } shouldBe 3
+      def aStream: Stream[Int] = 
+        Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ % 2 == 0).map(_ + 1).filter(_ < 5)
+      aStream                                         .toList  shouldBe List(3)
+      aStream.take(0)                                 .toList  shouldBe Nil
+      aStream.take(1)                                 .toList  shouldBe List(3)
+      aStream.foldRight(1){_ * _ }                             shouldBe 3
 
-      def stream2: Stream[Int] = Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ % 2 == 0).filter(_ < 5).map(_ + 1)
-      stream2             .toList  shouldBe List(3,5)
-      stream2.take(0)     .toList  shouldBe Nil
-      stream2.take(1)     .toList  shouldBe List(3)
-      stream2.foldRight(1){_ * _ } shouldBe 15
+      def sameContentsWithDifferentOrderOfOps: Stream[Int] =
+        Stream(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).filter(_ % 2 == 0).filter(_ < 5).map(_ + 1)
+      sameContentsWithDifferentOrderOfOps             .toList  shouldBe List(3,5)
+      sameContentsWithDifferentOrderOfOps.take(0)     .toList  shouldBe Nil
+      sameContentsWithDifferentOrderOfOps.take(1)     .toList  shouldBe List(3)
+      sameContentsWithDifferentOrderOfOps.foldRight(1){_ * _ } shouldBe 15
     }
   }
   "Find" should {
@@ -226,15 +228,14 @@ class StreamSpec extends WordSpec with Matchers {
       constant(1).forAll(_ != 1)                     shouldBe false
     }
     "infinite list makes for infinite fun" in{
-      infinity.take(5).toList shouldBe List(1,1,1,1,1)
+      infinity.take(5).toList shouldBe List.fill(5)(1)
+      infinity.take(1000).toList shouldBe List.fill(1000)(1)
     }
-    "create incrementing" in{
+    "create an incrementing series" in{
       from(1).take(1).toList               shouldBe List(1)
       from(1).take(2).toList               shouldBe List(1,2)
       from(1).take(3).toList               shouldBe List(1,2,3)
       from(2).take(2).toList               shouldBe List(2,3)
     }
   }
-
-
 }
