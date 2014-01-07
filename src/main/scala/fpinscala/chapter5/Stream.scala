@@ -16,7 +16,7 @@ sealed abstract class Stream[+A] {
 
   def takeWhile(f: A => Boolean): Stream[A] = uncons match {
     case Some(c) if f(c.head) => cons(c.head, c.tail takeWhile f)
-    case _ => empty
+    case _                    => empty
   }
 
   def takeWhileWithFoldr(p: A => Boolean): Stream[A] =
@@ -25,8 +25,8 @@ sealed abstract class Stream[+A] {
     }
 
   def foldRight[B](z: B)(f: (A, => B) => B): B = uncons match {
-    case Some(e) => f(e.head, e.tail.foldRight(z)(f))
-    case None => z
+    case Some(e)  => f(e.head, e.tail.foldRight(z)(f))
+    case None     => z
   }
 
   def exists(p: A => Boolean): Boolean =
@@ -53,14 +53,14 @@ sealed abstract class Stream[+A] {
     @scala.annotation.tailrec
     def loop(stream: Stream[A], list: List[A]): List[A] = stream.uncons match {
       case Some(cons) => loop(cons tail, list :+ cons.head)
-      case _ => list
+      case _          => list
     }
     loop(this, Nil)
   }
 
   def toList2: List[A] = uncons match {
-    case Some(c) => c.head :: c.tail.toList2
-    case _ => Nil
+    case Some(c)  => c.head :: c.tail.toList2
+    case _        => Nil
   }
 }
 
