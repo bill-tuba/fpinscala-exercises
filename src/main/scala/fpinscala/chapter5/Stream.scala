@@ -30,16 +30,16 @@ sealed abstract class Stream[+A] {
   }
 
   def exists(p: A => Boolean): Boolean =
-    foldRight(false)((a, b) => p(a) || b)
+    foldRight(false){(a, b) => p(a) || b}
 
   def forAll(p: A => Boolean): Boolean =
-    foldRight(false)((a, b) => p(a) && b)
+    foldRight(true){(a, b) => p(a) && b}
 
   def map[B](f: (A) => B): Stream[B] =
     foldRight(empty[B]) { (h, t) => cons(f(h), t) }
 
   def filter[B](f: A => Boolean): Stream[A] =
-    foldRight(empty[A])(  (h,t) => if (f(h)) cons(h, t)   else t)
+    foldRight(empty[A]){  (h,t) => if (f(h)) cons(h, t)   else t}
 
   def append[B >: A](implicit a2: Stream[B]): Stream[B] =
     foldRight(a2) {(h, t) => cons(h, t)}
@@ -52,10 +52,10 @@ sealed abstract class Stream[+A] {
   def toList: List[A] = {
     @scala.annotation.tailrec
     def loop(stream: Stream[A], list: List[A]): List[A] = stream.uncons match {
-      case Some(cons) => loop(cons tail, list :+ cons.head)
+      case Some(cons) => loop(cons tail, cons.head :: list )
       case _          => list
     }
-    loop(this, Nil)
+    loop(this, Nil).reverse
   }
 
   def toList2: List[A] = uncons match {
@@ -69,8 +69,8 @@ object Empty extends Stream[Nothing] {
 }
 
 sealed abstract class Cons[+A] extends Stream[A] {
-  val head  : A
-  val tail  : Stream[A]
+  def head  : A
+  def tail  : Stream[A]
   val uncons = Some(this)
 }
 
@@ -86,12 +86,12 @@ object Stream {
     lazy val tail = t
   }
   val infinity: Stream[Int] = cons(1, infinity)
+
   def constant[A](a: A): Stream[A] = cons(a, constant(a))
 
   def from(n: Int): Stream[Int] = new Cons[Int] {
     val head = n
     lazy val tail = from(n+1)
   }
-
 
 }

@@ -2,12 +2,11 @@ package fpinscala.chapter5
 
 import org.scalatest.{Matchers, WordSpec}
 
-import scala.Some
 import fpinscala.chapter5.Stream._
 import scala.Some
 
 class StreamSpec extends WordSpec with Matchers {
-  import Stream.{empty => anEmpty, cons,infinity }
+  import Stream.{empty => anEmpty, cons, infinity }
   "Streams" when {
     "constructed" can {
       "have no elements" in {
@@ -126,8 +125,9 @@ class StreamSpec extends WordSpec with Matchers {
     }
 
     "succeed where predicate evaluates to true for-all elements" in {
-      Stream(1, 2, 3).forAll(x => x > 0 && x < 4)       shouldBe false
-      Stream(1, 2, 3).forAll(x => (1 to 3).contains(x)) shouldBe false
+      Stream(1, 2, 3).forAll(x => x > 0 && x < 4)       shouldBe true
+      Stream(1, 2, 3).forAll(x => (1 to 3).contains(x)) shouldBe true
+      Stream(1, 2, 3).forAll(x => x < 0 && x > 4)       shouldBe false
     }
   }
 
@@ -209,8 +209,9 @@ class StreamSpec extends WordSpec with Matchers {
       Stream(3)         .find( _ <  3) shouldBe None
       Stream(1,2,3)     .find( _ == 2) shouldBe Some(2)
     }
-
-    "test finite part of an infinite stream" in {
+  }
+  "Infinite Streams" should {
+    "be able to have hofs applied against it" in {
       infinity.take(5)    .exists( _ == 1   )        shouldBe true
       infinity.map(_ + 1) .exists(_ % 2 == 0)        shouldBe true
       infinity.takeWhile(_ == 1).take(1)             shouldBe a [Stream[Int]]
@@ -223,12 +224,14 @@ class StreamSpec extends WordSpec with Matchers {
       constant(1).takeWhile(_ == 1).take(1)          shouldBe a [Stream[Int]]
       constant(1).forAll(_ != 1)                     shouldBe false
     }
-
+    "infinite list makes for infinite fun" in{
+      infinity.take(5).toList shouldBe List(1,1,1,1,1)
+    }
     "create incrementing Stream" in{
-      from(1).take(1).uncons.get.head               shouldBe 1
-      from(1).take(2).uncons.get.head               shouldBe 2
-      from(1).take(3).uncons.get.head               shouldBe 3
-      from(2).take(2).uncons.get.head               shouldBe 4
+      from(1).take(1).toList               shouldBe List(1)
+      from(1).take(2).toList               shouldBe List(1,2)
+      from(1).take(3).toList               shouldBe List(1,2,3)
+      from(2).take(2).toList               shouldBe List(2,3)
 
     }
   }
