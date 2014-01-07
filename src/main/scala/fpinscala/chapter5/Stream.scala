@@ -85,10 +85,10 @@ object Stream {
     lazy val head = h
     lazy val tail = t
   }
-  val infinity: Stream[Int] = cons(1, infinity)
+  val infinity         : Stream[Int]  = constant(1)
 
-  def constant[A](a: A): Stream[A] =  cons(a, constant(a))
+  def constant[A](a: A): Stream[A]    = cons(a, constant(a))
 
-  def from(n: Int): Stream[Int] =     cons(n , from( n + 1 ))
+  def from(n: Int)     : Stream[Int]  = cons(n , from( n + 1 ))
 
 }
