@@ -69,8 +69,8 @@ object Empty extends Stream[Nothing] {
 }
 
 sealed abstract class Cons[+A] extends Stream[A] {
-  val head: A
-  val tail: Stream[A]
+  val head  : A
+  val tail  : Stream[A]
   val uncons = Some(this)
 }
 

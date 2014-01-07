@@ -5,7 +5,7 @@ import org.scalatest.{Matchers, WordSpec}
 import scala.Some
 
 class StreamSpec extends WordSpec with Matchers {
-  import Stream.{empty => anEmpty, cons }
+  import Stream.{empty => anEmpty, cons,infinity }
   "Streams" when {
     "constructed" can {
       "have no elements" in {
@@ -209,7 +209,10 @@ class StreamSpec extends WordSpec with Matchers {
     }
 
     "test finite part of an infinite stream" in {
-      Stream.infinity.take(5).exists( _ == 1 ) shouldBe true
+      infinity.take(5)    .exists( _ == 1   )        shouldBe true
+      infinity.map(_ + 1) .exists(_ % 2 == 0)        shouldBe true
+      infinity.takeWhile(_ == 1).take(1)             shouldBe a [Stream[Int]]
+      infinity.forAll(_ != 1)                        shouldBe false
     }
   }
 
