@@ -209,7 +209,7 @@ class StreamSpec extends WordSpec with Matchers {
     }
 
     "test finite part of an infinite stream" in {
-      Stream.ones.take(5).exists( _ == 1 ) shouldBe true
+      Stream.infinity.take(5).exists( _ == 1 ) shouldBe true
     }
   }
 
