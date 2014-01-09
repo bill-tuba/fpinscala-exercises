@@ -1,5 +1,6 @@
 package fpinscala.chapter6
 
+
 trait RNG {
   def nextInt : (Int, RNG)
   def double(rng: RNG) : (Double, RNG)
@@ -8,6 +9,8 @@ trait RNG {
   def double3(rng: RNG): ((Double,Double,Double), RNG)
   def ints(count: Int)(rng: RNG): (List[Int], RNG)
 }
+
+//type Rand[+A] = RNG => (A, RNG)
 
 case class Simple(seed: Long) extends RNG {
 
@@ -43,6 +46,16 @@ case class Simple(seed: Long) extends RNG {
       val (d2 ,r2) = double(r1)
       val (d3 ,r3) = double(r2)
       ((d1,d2,d3),r3)
+  }
+
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    def loop (c : Int , list : (List[Int], RNG)) : (List[Int], RNG) = (c, list) match {
+      case (0, rest )=> rest
+      case (cnt, (l,r) ) => { val (i,r2): (Int, RNG) = r.nextInt
+        loop(cnt -1, ( i :: l , r2))
+      }
+    }
+   loop(count,(List(),rng))
   }
 }
 

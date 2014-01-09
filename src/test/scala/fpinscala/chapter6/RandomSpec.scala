@@ -35,4 +35,11 @@ class RandomSpec extends FlatSpec with Matchers{
     d4 shouldEqual  0.8334932754903535
     d5 shouldEqual  0.8334932754903535
   }
+
+  it should "fill a list up of rand ints" in {
+    val r = RNG(1)
+    val (list, state) = r.ints(5)(r)
+    list.size shouldEqual 5
+    state  shouldNot be theSameInstanceAs r
+  }
 }
