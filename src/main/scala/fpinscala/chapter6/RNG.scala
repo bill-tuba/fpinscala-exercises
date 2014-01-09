@@ -6,6 +6,7 @@ trait RNG {
   def intDouble(rng: RNG): ((Int,Double), RNG)
   def doubleInt(rng: RNG): ((Double,Int), RNG)
   def double3(rng: RNG): ((Double,Double,Double), RNG)
+  def ints(count: Int)(rng: RNG): (List[Int], RNG)
 }
 
 case class Simple(seed: Long) extends RNG {
