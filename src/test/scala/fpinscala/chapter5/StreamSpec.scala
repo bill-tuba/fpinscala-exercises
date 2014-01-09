@@ -274,11 +274,13 @@ class StreamSpec extends WordSpec with Matchers {
         fibWithUnfold.take(1)        .toList   shouldBe List(0)
         fibWithUnfold.take(7)        .toList   shouldBe List(0,1,1,2,3,5,8)
       }
+
       "rest of exercise 12" in{
         fromWithUnfold(1).take(3)     .toList  shouldBe List(1,2,3)
         constantWithUnfold(1).take(5) .toList  shouldBe List.fill(5)(1)
         onesWithUnfold.take(6)        .toList  shouldBe List.fill(6)(1)
       }
+
       "EXERCISE 13: Use unfold to implement map, take, takeWhile, zip and zipAll. "in {
         stream3.mapWithUnfold( x => x + 1)              .toList shouldBe List(2,3,4)
         stream3.map(_.toString).mapWithUnfold( _.toInt ).toList shouldBe List(1,2,3)
