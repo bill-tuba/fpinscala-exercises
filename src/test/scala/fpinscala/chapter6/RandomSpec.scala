@@ -6,7 +6,7 @@ class RandomSpec extends FlatSpec with Matchers{
   behavior of "Pseudo Random-Number-Generator P(RNG)"
 
   implicit def pimpMyInt(n : Int) = new {
-    def even_? = n % 2 == 0
+    def even_? = (n & 1) == 0
     def odd_?  = ! even_?
   }
 

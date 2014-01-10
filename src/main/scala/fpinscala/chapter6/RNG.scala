@@ -64,7 +64,7 @@ object RNG {
     }
 
   def positiveEven: Rand[Int] =
-    map(positiveInt){ i => i - i % 2 }
+    map(positiveInt){ i => i ^ 1 & i }
 
   def apply( seed : Int) : RNG =
     new Simple(seed)
