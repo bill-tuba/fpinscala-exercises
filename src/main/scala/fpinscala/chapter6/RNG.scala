@@ -16,15 +16,15 @@ case class Simple(seed: Long) extends RNG {
 
 object RNG {
 
+  val int: Rand[Int] = _.nextInt
+  
   def positiveInt(rng: RNG): (Int, RNG) = {
     val (x, next) = rng.nextInt
     (if(x < 0) -(x + 1) else x, next)
   }
 
-  def double(rng: RNG): (Double, RNG) ={
-    val (i, r) = positiveInt(rng)
-    (i.toDouble / Int.MaxValue, r)
-  }
+  def double(rng: RNG): (Double, RNG) =
+    map(positiveInt) {_.toDouble / Int.MaxValue}(rng)
 
   def intDouble(rng: RNG): ((Int, Double), RNG) = {
     val (i, next1) = rng.nextInt
@@ -52,6 +52,7 @@ object RNG {
     }
     loop(count,(List(),rng))
   }
+
   type Rand[+A] = RNG => (A, RNG)
 
   def unit[A](a: A): Rand[A] =
