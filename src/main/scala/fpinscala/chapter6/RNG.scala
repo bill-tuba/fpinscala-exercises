@@ -3,26 +3,22 @@ package fpinscala.chapter6
 
 trait RNG {
   def nextInt : (Int, RNG)
-  def double(rng: RNG) : (Double, RNG)
-  def intDouble(rng: RNG): ((Int,Double), RNG)
-  def doubleInt(rng: RNG): ((Double,Int), RNG)
-  def double3(rng: RNG): ((Double,Double,Double), RNG)
-  def ints(count: Int)(rng: RNG): (List[Int], RNG)
 }
 
-//type Rand[+A] = RNG => (A, RNG)
-
 case class Simple(seed: Long) extends RNG {
-
-  def positiveInt(rng: RNG): (Int, RNG) = {
-    val (x, next) = nextInt
-    (if(x < 0) -(x + 1) else x, next)
-  }
   def nextInt: (Int, RNG) = {
     val newSeed = (seed * 0x5DEECE66DL + 0xBL) & 0xFFFFFFFFFFFFL
     val nextRNG = Simple(newSeed)
     val n = (newSeed >>> 16).toInt
     (n, nextRNG)
+  }
+}
+
+object RNG {
+
+  def positiveInt(rng: RNG): (Int, RNG) = {
+    val (x, next) = rng.nextInt
+    (if(x < 0) -(x + 1) else x, next)
   }
 
   def double(rng: RNG): (Double, RNG) ={
@@ -42,24 +38,34 @@ case class Simple(seed: Long) extends RNG {
   }
 
   def double3(rng: RNG): ((Double, Double, Double), RNG) = {
-      val (d1 ,r1) = double(rng)
-      val (d2 ,r2) = double(r1)
-      val (d3 ,r3) = double(r2)
-      ((d1,d2,d3),r3)
+    val (d1 ,r1) = double(rng)
+    val (d2 ,r2) = double(r1)
+    val (d3 ,r3) = double(r2)
+    ((d1,d2,d3),r3)
   }
 
   def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
     def loop (c : Int , list : (List[Int], RNG)) : (List[Int], RNG) = (c, list) match {
       case (0, rest )=> rest
-      case (cnt, (l,r) ) => { val (i,r2): (Int, RNG) = r.nextInt
+      case (cnt, (l,r) ) => val (i,r2): (Int, RNG) = r.nextInt
         loop(cnt -1, ( i :: l , r2))
-      }
     }
-   loop(count,(List(),rng))
+    loop(count,(List(),rng))
   }
-}
+  type Rand[+A] = RNG => (A, RNG)
 
-object RNG {
+  def unit[A](a: A): Rand[A] =
+    rng => (a, rng)
+
+  def map[A,B](s: Rand[A])(f: A => B): Rand[B] =
+    rng => {
+      val (a, rng2) = s(rng)
+      (f(a), rng2)
+    }
+
+  def positiveEven: Rand[Int] =
+    map(positiveInt){ i => i - i % 2 }
+
   def apply( seed : Int) : RNG =
     new Simple(seed)
 }
