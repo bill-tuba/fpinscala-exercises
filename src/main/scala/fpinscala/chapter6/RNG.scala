@@ -27,14 +27,17 @@ object RNG {
     map(positiveInt) {_.toDouble / Int.MaxValue}(rng)
 
   def intDouble(rng: RNG): ((Int, Double), RNG) = {
-    val (i, next1) = rng.nextInt
-    val (d ,next2) = double(next1)
-    ((i,d), next2)
+    randIntDouble(rng)
   }
 
+  val randIntDouble: Rand[(Int, Double)] =
+    both(int, double)
+
+  val randDoubleInt : Rand[(Double,Int)] =
+    both(double,int)
+
   def doubleInt(rng: RNG): ((Double, Int), RNG) = {
-    val ((i,d),r) = intDouble(rng)
-    ((d,i),r)
+    randDoubleInt(rng)
   }
 
   def double3(rng: RNG): ((Double, Double, Double), RNG) = {
@@ -63,6 +66,17 @@ object RNG {
       val (a, rng2) = s(rng)
       (f(a), rng2)
     }
+
+  def both[A,B](ra: Rand[A], rb: Rand[B]): Rand[(A,B)] =
+    map2(ra, rb)((_, _))
+
+  def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
+    rng => {
+      val ( a, rng2) = ra(rng)
+      val ( b ,rng3) = rb(rng2)
+      (f(a,b), rng3)
+    }
+  }
 
   def positiveEven: Rand[Int] =
     map(positiveInt){ i => i ^ 1 & i }

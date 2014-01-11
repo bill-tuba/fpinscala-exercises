@@ -31,8 +31,8 @@ class RandomSpec extends FlatSpec with Matchers{
     d shouldEqual  0.5754334291328832
 
     val ((d2,i2), _) = doubleInt(initialState)
-    i2 shouldEqual  -1789913180
-    d2 shouldEqual  0.5754334291328832
+    i2 shouldEqual  -1235733880
+    d2 shouldEqual  0.8334932754903535
 
     val ((d3,d4,d5), _) = double3(initialState)
     d3 shouldEqual  0.8334932754903535
