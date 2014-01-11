@@ -47,6 +47,12 @@ object RNG {
     ((d1,d2,d3),r3)
   }
 
+
+//  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] {
+//
+//  }
+
+
   def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
     def loop (c : Int , list : (List[Int], RNG)) : (List[Int], RNG) = (c, list) match {
       case (0, rest )=> rest
@@ -56,19 +62,31 @@ object RNG {
     loop(count,(List(),rng))
   }
 
+  //Rand
   type Rand[+A] = RNG => (A, RNG)
 
   def unit[A](a: A): Rand[A] =
     rng => (a, rng)
 
+  // I will pass you back a Rand... that
+  //  takes RNG a makes the state transition for you
+  //    applying fn f to the A part of Rand and return you the new Rand
   def map[A,B](s: Rand[A])(f: A => B): Rand[B] =
     rng => {
       val (a, rng2) = s(rng)
       (f(a), rng2)
     }
 
+
   def both[A,B](ra: Rand[A], rb: Rand[B]): Rand[(A,B)] =
     map2(ra, rb)((_, _))
+
+  // Returns A Rand Fn that....
+  //  If you pass me a RNG I'll do Two state transitions for you
+  //      then I'll return a new Rand
+  //          where the A part is the result of
+  //                applying f to the two A's gathered from the state transitions
+  //                and the RNG part is the returned RNG of the 2nd transition
 
   def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
     rng => {

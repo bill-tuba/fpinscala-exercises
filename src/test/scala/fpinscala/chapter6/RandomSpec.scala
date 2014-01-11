@@ -47,8 +47,10 @@ class RandomSpec extends FlatSpec with Matchers{
     state  shouldNot be theSameInstanceAs r
   }
 
-  it should "poop" in {
+  it can "do oddball stuff" in {
     assert ( positiveEven(RNG(2))._1 even_?)
     assert (!positiveEven(RNG(2))._1.odd_? )
   }
+
+
 }
