@@ -62,5 +62,12 @@ class RandomSpec extends FlatSpec with Matchers {
 
   }
 
+  it should "fill a list up of rand ints using sequence" in {
+    val r = RNG(1)
+    val (list, state) = ints(5)(r)
+    list.size shouldEqual 5
+    state shouldNot be theSameInstanceAs r
+    list shouldEqual  List(-883454042, 1612966641, -549383847, -1151252339, 384748)
+  }
 
 }

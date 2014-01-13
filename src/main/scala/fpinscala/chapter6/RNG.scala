@@ -23,57 +23,15 @@ object RNG {
     def neg_?  = !pos_?
   }
 
-  val int: Rand[Int] = _.nextInt
-
-
-  def positiveInt(rng: RNG): (Int, RNG) = {
-    val (x, next) = rng.nextInt
-    (if (x neg_?) -(x + 1) else x, next)
-  }
-
-  def double(rng: RNG): (Double, RNG) =
-    map(positiveInt) {_.toDouble / Int.MaxValue}(rng)
-
-  def intDouble(rng: RNG): ((Int, Double), RNG) = {
-    randIntDouble(rng)
-  }
-
-  val randIntDouble: Rand[(Int, Double)] =
-    both(int, double)
-
-  val randDoubleInt : Rand[(Double,Int)] =
-    both(double,int)
-
-  def doubleInt(rng: RNG): ((Double, Int), RNG) = {
-    randDoubleInt(rng)
-  }
-
-  def double3(rng: RNG): ((Double, Double, Double), RNG) = {
-    val (d1 ,r1) = double(rng)
-    val (d2 ,r2) = double(r1)
-    val (d3 ,r3) = double(r2)
-    ((d1,d2,d3),r3)
-  }
-
-
-//  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] {
-//
-//  }
-
-
-  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
-    def loop (c : Int , list : (List[Int], RNG)) : (List[Int], RNG) = (c, list) match {
-      case (0, rest )=> rest
-      case (cnt, (l,r) ) => val (i,r2): (Int, RNG) = r.nextInt
-        loop(cnt -1, ( i :: l , r2))
-    }
-    loop(count,(List(),rng))
-  }
+  def apply( seed : Int) : RNG =
+    new Simple(seed)
 
   //Pass me a RNG and I'll do some operation (like a state-transition) that passes back a couplet
   //This is an alias for "state-transition" operations
   type Rand[+A] = RNG => (A, RNG)
 
+  //give me A and I'll pass you a fn that takes in a rng and
+  // hands you back a Rand
   def unit[A](a: A): Rand[A] =
     rng => (a, rng)
 
@@ -105,9 +63,52 @@ object RNG {
     }
   }
 
+  //  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] {
+  //    if no List? empty Rand? huh?
+  //
+  //  }
+
+  val int: Rand[Int] = _.nextInt
+
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    def loop (c : Int , list : (List[Int], RNG)) : (List[Int], RNG) = (c, list) match {
+      case (0, rest )=> rest
+      case (cnt, (l,r) ) => val (i,r2): (Int, RNG) = r.nextInt
+        loop(cnt -1, ( i :: l , r2))
+    }
+    loop(count,(List(),rng))
+  }
+
+  def positiveInt(rng: RNG): (Int, RNG) = {
+    val (x, next) = rng.nextInt
+    (if (x neg_?) -(x + 1) else x, next)
+  }
+
   def positiveEven: Rand[Int] =
     map(positiveInt){ i => i ^ 1 & i }
 
-  def apply( seed : Int) : RNG =
-    new Simple(seed)
+  def double(rng: RNG): (Double, RNG) =
+    map(positiveInt) {_.toDouble / Int.MaxValue}(rng)
+
+
+  def intDouble(rng: RNG): ((Int, Double), RNG) = {
+    randIntDouble(rng)
+  }
+
+  def doubleInt(rng: RNG): ((Double, Int), RNG) = {
+    randDoubleInt(rng)
+  }
+
+  def double3(rng: RNG): ((Double, Double, Double), RNG) = {
+    val (d1 ,r1) = double(rng)
+    val (d2 ,r2) = double(r1)
+    val (d3 ,r3) = double(r2)
+    ((d1,d2,d3),r3)
+  }
+
+  val randIntDouble: Rand[(Int, Double)] =
+    both(int, double)
+
+  val randDoubleInt : Rand[(Double,Int)] =
+    both(double,int)
 }
