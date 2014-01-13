@@ -16,11 +16,19 @@ case class Simple(seed: Long) extends RNG {
 
 object RNG {
 
+  implicit def intExtensions(n : Int) = new {
+    def even_? = (n & 1) == 0
+    def odd_?  = ! even_?
+    def pos_?  = n > 0
+    def neg_?  = !pos_?
+  }
+
   val int: Rand[Int] = _.nextInt
-  
+
+
   def positiveInt(rng: RNG): (Int, RNG) = {
     val (x, next) = rng.nextInt
-    (if(x < 0) -(x + 1) else x, next)
+    (if (x neg_?) -(x + 1) else x, next)
   }
 
   def double(rng: RNG): (Double, RNG) =
@@ -62,7 +70,8 @@ object RNG {
     loop(count,(List(),rng))
   }
 
-  //Rand
+  //Pass me a RNG and I'll do some operation (like a state-transition) that passes back a couplet
+  //This is an alias for "state-transition" operations
   type Rand[+A] = RNG => (A, RNG)
 
   def unit[A](a: A): Rand[A] =
