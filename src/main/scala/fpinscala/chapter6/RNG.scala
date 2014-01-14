@@ -64,18 +64,12 @@ object RNG {
   }
 
 
-  /*
-  def sequence2[E, A](a: List[Either[E, A]]): Either[E, List[A]] = a match {
-    case Nil => Right(Nil)
-    case h :: t => for {hh <- h; tt <- sequence(t)} yield {
-      hh :: tt
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = fs match {
+    case Nil => unit(Nil)
+    case h :: t => map2(h, sequence(t)) {
+      (a, b) => a :: b
     }
   }
-   */
-    def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = fs match {
-        case Nil => unit(Nil)
-        case h :: t => map2(h, sequence(t)){ (a,b) => a :: b }
-    }
 
   val int: Rand[Int] = _.nextInt
 
