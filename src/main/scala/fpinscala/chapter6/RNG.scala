@@ -63,10 +63,19 @@ object RNG {
     }
   }
 
-  //  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] {
-  //    if no List? empty Rand? huh?
-  //
-  //  }
+
+  /*
+  def sequence2[E, A](a: List[Either[E, A]]): Either[E, List[A]] = a match {
+    case Nil => Right(Nil)
+    case h :: t => for {hh <- h; tt <- sequence(t)} yield {
+      hh :: tt
+    }
+  }
+   */
+    def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = fs match {
+        case Nil => unit(Nil)
+        case h :: t => map2(h, sequence(t)){ (a,b) => a :: b }
+    }
 
   val int: Rand[Int] = _.nextInt
 
@@ -79,9 +88,13 @@ object RNG {
     loop(count,(List(),rng))
   }
 
+  def intsWithSeq(count: Int)(rng: RNG): (List[Int], RNG)= {
+    sequence(List.fill(count){int} )(rng)
+  }
+
   def positiveInt(rng: RNG): (Int, RNG) = {
     val (x, next) = rng.nextInt
-    (if (x neg_?) -(x + 1) else x, next)
+    (if (x.neg_?) -(x + 1) else x, next)
   }
 
   def positiveEven: Rand[Int] =

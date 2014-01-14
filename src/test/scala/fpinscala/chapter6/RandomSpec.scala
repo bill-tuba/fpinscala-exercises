@@ -52,22 +52,11 @@ class RandomSpec extends FlatSpec with Matchers {
     i shouldEqual 1666869822
 
   }
-  it should "have a sandbox" in {
-    assert(positiveEven(RNG(2))._1 even_?)
-    assert(!positiveEven(RNG(2))._1.odd_?)
-
-    val r = RNG(1)
-    val (i, r2) = r.nextInt
-    val rand: Rand[Int] = (x: RNG) => x.nextInt
-
-  }
 
   it should "fill a list up of rand ints using sequence" in {
     val r = RNG(1)
-    val (list, state) = ints(5)(r)
-    list.size shouldEqual 5
-    state shouldNot be theSameInstanceAs r
-    list shouldEqual  List(-883454042, 1612966641, -549383847, -1151252339, 384748)
+    val (list, _) = intsWithSeq(5)(r)
+    list.sorted shouldEqual  List(-883454042, 1612966641, -549383847, -1151252339, 384748).sorted
   }
 
 }
