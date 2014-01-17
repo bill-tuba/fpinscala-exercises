@@ -66,10 +66,16 @@ object RNG {
 
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = fs match {
     case Nil => unit(Nil)
-    case h :: t => map2(h, sequence(t)) {
-      (a, b) => a :: b
-    }
+    case h :: t => map2(h, sequence(t)) {_ :: _}
   }
+
+//  def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] ={
+//    rng2 => {
+//    val (a, rng2) = f
+//    val ( b ,rng3) = g(rng2)
+//    (b , rng3)
+//    }
+//  }
 
   val int: Rand[Int] = _.nextInt
 
