@@ -62,8 +62,6 @@ object RNG {
   def both[A,B](ra: Rand[A], rb: Rand[B]): Rand[(A,B)] =
   map2(ra, rb)((_, _))
 
-
-
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = fs match {
     case Nil => unit(Nil)
     case h :: t => map2(h, sequence(t)) {_ :: _}
