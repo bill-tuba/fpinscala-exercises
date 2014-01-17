@@ -41,22 +41,41 @@ class RandomSpec extends FlatSpec with Matchers {
     val (list, state) = ints(5)(r)
     list.size shouldEqual 5
     state shouldNot be theSameInstanceAs r
-    list shouldEqual  List(-883454042, 1612966641, -549383847, -1151252339, 384748)
-   }
+    list shouldEqual List(-883454042, 1612966641, -549383847, -1151252339, 384748)
+  }
 
   it can "get a double int pair" in {
     val r = RNG(400)
     val rand = randDoubleInt(r)
-    val (d , i)  = rand._1
+    val (d, i) = rand._1
     d shouldEqual 0.07166506725906631
     i shouldEqual 1666869822
-
   }
 
   it should "fill a list up of rand ints using sequence" in {
     val r = RNG(1)
     val (list, _) = intsWithSeq(5)(r)
-    list.sorted shouldEqual  List(-883454042, 1612966641, -549383847, -1151252339, 384748).sorted
+    list.sorted shouldEqual List(-883454042, 1612966641, -549383847, -1151252339, 384748).sorted
   }
+
+  it can "generate Positive ints" in {
+    val (i, _) = positiveInt(RNG(1))
+    // fails on RNG(0)
+    i should be > 0
+  }
+
+  "roll a die" should "be within range" in{
+    (1 to 1000000).foreach( n =>
+      rollDie(RNG(n))._1 should  (be > 0 and be < 7)
+    )
+  }
+  def positiveLessThan(n: Int): Rand[Int] =
+      flatMap(positiveInt){ i =>
+        val mod : Int= i % n
+        if (i + (n-1) - mod > 0) rnd => (mod,rnd)
+        else positiveLessThan(n)
+   }
+
+  def rollDie: Rand[Int] = map( positiveLessThan(6) ) { _ + 1 }
 
 }

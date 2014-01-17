@@ -33,20 +33,20 @@ object RNG {
   //give me A and I'll pass you a fn that takes in a rng and
   // hands you back a Rand
   def unit[A](a: A): Rand[A] =
-    rng => (a, rng)
+  rng => (a, rng)
 
   // I will pass you back a Rand... that
   //  takes RNG a makes the state transition for you
   //    applying fn f to the A part of Rand and return you the new Rand
   def map[A,B](s: Rand[A])(f: A => B): Rand[B] =
+    flatMap(s)(a => rng => (f(a),rng))
+
+  def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] = {
     rng => {
-      val (a, rng2) = s(rng)
-      (f(a), rng2)
+      val (a, r) = f(rng)
+      g(a)(r)
     }
-
-
-  def both[A,B](ra: Rand[A], rb: Rand[B]): Rand[(A,B)] =
-    map2(ra, rb)((_, _))
+  }
 
   // Returns A Rand Fn that....
   //  If you pass me a RNG I'll do Two state transitions for you
@@ -56,12 +56,12 @@ object RNG {
   //                and the RNG part is the returned RNG of the 2nd transition
 
   def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
-    rng => {
-      val ( a, rng2) = ra(rng)
-      val ( b ,rng3) = rb(rng2)
-      (f(a,b), rng3)
-    }
+    flatMap(ra)(a => flatMap(rb){ b=> rng => (f(a, b), rng)})
   }
+
+  def both[A,B](ra: Rand[A], rb: Rand[B]): Rand[(A,B)] =
+  map2(ra, rb)((_, _))
+
 
 
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = fs match {
@@ -69,13 +69,6 @@ object RNG {
     case h :: t => map2(h, sequence(t)) {_ :: _}
   }
 
-//  def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] ={
-//    rng2 => {
-//    val (a, rng2) = f
-//    val ( b ,rng3) = g(rng2)
-//    (b , rng3)
-//    }
-//  }
 
   val int: Rand[Int] = _.nextInt
 
